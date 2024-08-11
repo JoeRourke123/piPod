@@ -1,6 +1,6 @@
 module orchestrator
 
-go 1.22.4
+go 1.22
 
 require (
 	github.com/gofiber/contrib/websocket v1.3.2
