@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	MAXMSGSIZE = 8000
+	MAXMSGSIZE = 1024
 )
 
 func main() {
@@ -44,28 +44,22 @@ func main() {
 		}
 	}
 
-	var msg string
 	var response []byte
 
 	response = make([]byte, MAXMSGSIZE)
 
-	print("> ")
-	fmt.Scanln(&msg)
-	err = unix.Sendmsg(
-		serverFD,
-		[]byte(msg),
-		nil, serverAddr, unix.MSG_DONTWAIT)
-	if err != nil {
-		fmt.Println("Sendmsg: ", err)
+	defer unix.Close(serverFD)
+
+	for {
+		_, _, err = unix.Recvfrom(serverFD, response, 0)
+		if err != nil {
+			fmt.Println("Recvfrom: ", err)
+			unix.Close(serverFD)
+			return
+		}
+		fmt.Printf("< %s\n", string(response))
 	}
-	_, _, err = unix.Recvfrom(serverFD, response, 0)
-	if err != nil {
-		fmt.Println("Recvfrom: ", err)
-		unix.Close(serverFD)
-		return
-	}
-	fmt.Printf("< %s\n", string(response))
-	unix.Close(serverFD)
+
 	return
 }
 
