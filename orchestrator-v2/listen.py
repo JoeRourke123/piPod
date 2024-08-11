@@ -19,7 +19,10 @@ def run_client():
 
             # receive message from the server
             response = client.recv(128)
-            print(response)
+            print(response[0])
+            print(response[1])
+            print(response[2])
+            print("______")
         except:
             pass
 
