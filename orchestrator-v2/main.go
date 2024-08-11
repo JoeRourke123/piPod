@@ -25,6 +25,8 @@ func main() {
 		log.Fatal("Socket: ", err)
 	}
 
+	unix.SetNonblock(serverFD, true)
+
 	port, err := strconv.Atoi(args[1])
 	if err != nil || (port < 0 || port > 100000) {
 		os.Stderr.WriteString("Invalid port format\n")
@@ -35,7 +37,7 @@ func main() {
 		Addr: inetAddr(args[0]),
 	}
 
-	err = unix.Connect(serverFD, serverAddr)
+	err = unix.Bind(serverFD, serverAddr)
 	if err != nil {
 		if err == unix.ECONNREFUSED {
 			fmt.Println("* Connection failed")
@@ -52,12 +54,12 @@ func main() {
 
 	for {
 		_, _, err = unix.Recvfrom(serverFD, response, 0)
-		if err != nil {
-			fmt.Println("Recvfrom: ", err)
-			unix.Close(serverFD)
-			return
+		if err == nil {
+			fmt.Println(response[0])
+			fmt.Println(response[1])
+			fmt.Println(response[2])
+			fmt.Println("________")
 		}
-		fmt.Printf("< %s\n", string(response))
 	}
 
 	return
