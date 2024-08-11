@@ -1,9 +1,9 @@
 package main
 
 type ClickWheelEvent struct {
-	button              string `json:"button"`
-	isClickWheelPressed bool   `json:"is_click_wheel_pressed"`
-	clickwheelPosition  int    `json:"click_wheel_position"`
+	Button              string `json:"button"`
+	IsClickWheelPressed bool   `json:"is_click_wheel_pressed"`
+	ClickwheelPosition  int    `json:"click_wheel_position"`
 }
 
 func BuildClickWheelEvent(previous *ClickWheelEvent, buttonId int, clickWheelFlag int, clickwheelPosition int) *ClickWheelEvent {
@@ -14,21 +14,21 @@ func BuildClickWheelEvent(previous *ClickWheelEvent, buttonId int, clickWheelFla
 		9:   "Back",
 		10:  "Play",
 		11:  "Menu",
-		255: previous.button,
+		255: previous.Button,
 	}
 
 	button := buttonMap[buttonId]
 
 	var isClickWheelPressed bool
 	if clickWheelFlag > 1 {
-		isClickWheelPressed = previous.isClickWheelPressed
+		isClickWheelPressed = previous.IsClickWheelPressed
 	} else {
 		isClickWheelPressed = clickWheelFlag == 1
 	}
 
 	return &ClickWheelEvent{
-		button:              button,
-		isClickWheelPressed: isClickWheelPressed,
-		clickwheelPosition:  clickwheelPosition,
+		Button:              button,
+		IsClickWheelPressed: isClickWheelPressed,
+		ClickwheelPosition:  clickwheelPosition,
 	}
 }
