@@ -20,7 +20,7 @@ func main() {
 		fmt.Println("./client [IPv4] [Port]")
 	}
 
-	serverFD, err := unix.Socket(unix.AF_INET, unix.SOCK_STREAM, unix.IPPROTO_IP)
+	serverFD, err := unix.Socket(unix.AF_INET, unix.SOCK_DGRAM, unix.IPPROTO_IP)
 	if err != nil {
 		log.Fatal("Socket: ", err)
 	}
