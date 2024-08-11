@@ -38,8 +38,6 @@ func openSocketConnection() int {
 		}
 	}
 
-	defer unix.Close(serverFD)
-
 	return serverFD
 }
 

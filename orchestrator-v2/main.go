@@ -16,6 +16,8 @@ func main() {
 		previousEvent := &ClickWheelEvent{IsClickWheelPressed: false, Button: "ClickWheel", ClickwheelPosition: 0}
 		serverFD := openSocketConnection()
 
+		defer unix.Close(serverFD)
+
 		for {
 			response := make([]byte, PacketSize)
 
