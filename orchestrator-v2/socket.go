@@ -33,7 +33,7 @@ func openSocketConnection() int {
 		if err == unix.ECONNREFUSED {
 			fmt.Println("* Connection failed")
 			unix.Close(serverFD)
-			return
+			return -1
 		}
 	}
 
