@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"log"
 
@@ -18,7 +19,9 @@ func main() {
 	app.Get("/ws", websocket.New(func(c *websocket.Conn) {
 		for {
 			event := <-eventsChannel
+			fmt.Println(event)
 			eventJson, _ := json.Marshal(event)
+			fmt.Println(eventJson)
 
 			if err := c.WriteMessage(websocket.TextMessage, eventJson); err != nil {
 				log.Println("write:", err)
