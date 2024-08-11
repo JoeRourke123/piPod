@@ -12,10 +12,22 @@ def run_client():
     client.setblocking(0)
 
     while True:
-        # receive message from the server
-        response = client.recv(128)
+        try:
+            # input message and send it to the server
+            #msg = input("Enter message: ")
+            #client.send(msg.encode("utf-8")[:1024])
 
-        print(response)
+            # receive message from the server
+            response = client.recv(128)
+            response = response.decode("utf-8")
+
+            # if server sent us "closed" in the payload, we break out of the loop and close our socket
+            if response.lower() == "closed":
+                break
+
+            print(f"Received: {response}")
+        except:
+            pass
 
     # close client socket (connection to the server)
     client.close()
