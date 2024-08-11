@@ -15,13 +15,14 @@ func main() {
 	app.Get("/ws", websocket.New(func(c *websocket.Conn) {
 		previousEvent := &ClickWheelEvent{IsClickWheelPressed: false, Button: "ClickWheel", ClickwheelPosition: 0}
 		serverFD := openSocketConnection()
-		response := make([]byte, PacketSize)
 
 		for {
+			response := make([]byte, PacketSize)
+
 			_, _, err := unix.Recvfrom(serverFD, response, 0)
 			if err == nil {
 				event := BuildClickWheelEvent(previousEvent, int(response[0]), int(response[1]), int(response[2]))
-
+				log.Println(event)
 				eventJson, _ := json.Marshal(event)
 
 				if err := c.WriteMessage(websocket.TextMessage, eventJson); err != nil {
