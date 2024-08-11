@@ -1,0 +1,25 @@
+import socket
+
+
+def run_client():
+    # create a socket object
+    client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    server_ip = "127.0.0.1"  # replace with the server's IP address
+    server_port = 9090  # replace with the server's port number
+    # establish connection with server
+    client.bind((server_ip, server_port))
+    client.setblocking(0)
+
+    while True:
+        # receive message from the server
+        response = client.recv(128)
+
+        print(response)
+
+    # close client socket (connection to the server)
+    client.close()
+    print("Connection to server closed")
+
+run_client()
+

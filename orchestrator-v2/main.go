@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	MAXMSGSIZE = 1024
+	MAXMSGSIZE = 128
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 		fmt.Println("./client [IPv4] [Port]")
 	}
 
-	serverFD, err := unix.Socket(unix.AF_INET, unix.SOCK_DGRAM, unix.IPPROTO_IP)
+	serverFD, err := unix.Socket(unix.AF_INET, unix.SOCK_DGRAM, 0)
 	if err != nil {
 		log.Fatal("Socket: ", err)
 	}
