@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"golang.org/x/sys/unix"
 	"log"
 
 	"github.com/gofiber/contrib/websocket"
@@ -12,20 +12,24 @@ import (
 func main() {
 	app := fiber.New()
 
-	eventsChannel := make(chan *ClickWheelEvent)
-
-	go openSocketConnection(eventsChannel)
-
 	app.Get("/ws", websocket.New(func(c *websocket.Conn) {
-		for {
-			event := <-eventsChannel
-			fmt.Println(event)
-			eventJson, _ := json.Marshal(event)
-			fmt.Println(eventJson)
+		previousEvent := &ClickWheelEvent{IsClickWheelPressed: false, Button: "ClickWheel", ClickwheelPosition: 0}
+		serverFD := openSocketConnection()
+		response := make([]byte, PacketSize)
 
-			if err := c.WriteMessage(websocket.TextMessage, eventJson); err != nil {
-				log.Println("write:", err)
-				break
+		for {
+			_, _, err := unix.Recvfrom(serverFD, response, 0)
+			if err == nil {
+				event := BuildClickWheelEvent(previousEvent, int(response[0]), int(response[1]), int(response[2]))
+
+				eventJson, _ := json.Marshal(event)
+
+				if err := c.WriteMessage(websocket.TextMessage, eventJson); err != nil {
+					log.Println("write:", err)
+					break
+				}
+
+				previousEvent = event
 			}
 		}
 

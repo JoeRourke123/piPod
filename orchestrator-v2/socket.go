@@ -15,7 +15,7 @@ const (
 	SocketPort = 9090
 )
 
-func openSocketConnection(events chan<- *ClickWheelEvent) {
+func openSocketConnection() int {
 	serverFD, err := unix.Socket(unix.AF_INET, unix.SOCK_DGRAM, 0)
 	if err != nil {
 		log.Fatal("Socket: ", err)
@@ -37,24 +37,9 @@ func openSocketConnection(events chan<- *ClickWheelEvent) {
 		}
 	}
 
-	var response []byte
-
-	response = make([]byte, PacketSize)
-
 	defer unix.Close(serverFD)
 
-	previousEvent := &ClickWheelEvent{IsClickWheelPressed: false, Button: "ClickWheel", ClickwheelPosition: 0}
-
-	for {
-		_, _, err = unix.Recvfrom(serverFD, response, 0)
-		if err == nil {
-			event := BuildClickWheelEvent(previousEvent, int(response[0]), int(response[1]), int(response[2]))
-
-			events <- event
-
-			previousEvent = event
-		}
-	}
+	return serverFD
 }
 
 func inetAddr(ipaddr string) [4]byte {
