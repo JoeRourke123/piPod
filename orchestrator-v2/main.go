@@ -11,14 +11,14 @@ import (
 func main() {
 	app := fiber.New()
 
-	eventsChannel := make(chan ClickWheelEvent)
+	eventsChannel := make(chan *ClickWheelEvent)
 
 	go openSocketConnection(eventsChannel)
 
 	app.Get("/ws", websocket.New(func(c *websocket.Conn) {
 		for {
 			event := <-eventsChannel
-			eventJson, _ := json.Marshal(&event)
+			eventJson, _ := json.Marshal(event)
 
 			if err := c.WriteMessage(websocket.TextMessage, eventJson); err != nil {
 				log.Println("write:", err)

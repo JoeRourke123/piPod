@@ -15,7 +15,7 @@ const (
 	SocketPort = 9090
 )
 
-func openSocketConnection(events chan<- ClickWheelEvent) {
+func openSocketConnection(events chan<- *ClickWheelEvent) {
 	serverFD, err := unix.Socket(unix.AF_INET, unix.SOCK_DGRAM, 0)
 	if err != nil {
 		log.Fatal("Socket: ", err)
@@ -43,7 +43,7 @@ func openSocketConnection(events chan<- ClickWheelEvent) {
 
 	defer unix.Close(serverFD)
 
-	previousEvent := ClickWheelEvent{isClickWheelPressed: false, button: "ClickWheel", clickwheelPosition: 0}
+	previousEvent := &ClickWheelEvent{isClickWheelPressed: false, button: "ClickWheel", clickwheelPosition: 0}
 
 	for {
 		_, _, err = unix.Recvfrom(serverFD, response, 0)

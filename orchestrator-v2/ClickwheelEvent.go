@@ -6,7 +6,7 @@ type ClickWheelEvent struct {
 	clickwheelPosition  int    `json:"click_wheel_position"`
 }
 
-func BuildClickWheelEvent(previous ClickWheelEvent, buttonId int, clickWheelFlag int, clickwheelPosition int) ClickWheelEvent {
+func BuildClickWheelEvent(previous *ClickWheelEvent, buttonId int, clickWheelFlag int, clickwheelPosition int) *ClickWheelEvent {
 	buttonMap := map[int]string{
 		29:  "ClickWheel",
 		7:   "Select",
@@ -26,7 +26,7 @@ func BuildClickWheelEvent(previous ClickWheelEvent, buttonId int, clickWheelFlag
 		isClickWheelPressed = clickWheelFlag == 1
 	}
 
-	return ClickWheelEvent{
+	return &ClickWheelEvent{
 		button:              button,
 		isClickWheelPressed: isClickWheelPressed,
 		clickwheelPosition:  clickwheelPosition,
