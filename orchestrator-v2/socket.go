@@ -17,6 +17,7 @@ const (
 
 func openSocketConnection() int {
 	serverFD, err := unix.Socket(unix.AF_INET, unix.SOCK_DGRAM, 0)
+	log.Println("Opening socket connection: ", serverFD)
 	if err != nil {
 		log.Fatal("Socket: ", err)
 	}
