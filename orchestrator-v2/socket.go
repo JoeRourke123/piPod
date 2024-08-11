@@ -43,7 +43,7 @@ func openSocketConnection(events chan<- *ClickWheelEvent) {
 
 	defer unix.Close(serverFD)
 
-	previousEvent := &ClickWheelEvent{isClickWheelPressed: false, button: "ClickWheel", clickwheelPosition: 0}
+	previousEvent := &ClickWheelEvent{IsClickWheelPressed: false, Button: "ClickWheel", ClickwheelPosition: 0}
 
 	for {
 		_, _, err = unix.Recvfrom(serverFD, response, 0)
