@@ -1,0 +1,12 @@
+body {
+    overflow: hidden;
+}
+
+.listView {
+    overflow-y: scroll;
+    height: 180px;
+}
+
+.listView::-webkit-scrollbar {
+    display: none;
+}
