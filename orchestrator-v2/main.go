@@ -33,8 +33,6 @@ func main() {
 				}
 
 				previousEvent = event
-			} else {
-				log.Println("error reading msg: ", err)
 			}
 		}
 
