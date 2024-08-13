@@ -5,8 +5,20 @@ body {
 .listView {
     overflow-y: scroll;
     height: 180px;
+    box-shadow: white inset 0px 0px 80px 80px;
 }
 
 .listView::-webkit-scrollbar {
     display: none;
+}
+
+.listViewItem {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 20ch;
+}
+
+.titleBar {
+    box-shadow: white 0px 0px 80px 80px;
 }

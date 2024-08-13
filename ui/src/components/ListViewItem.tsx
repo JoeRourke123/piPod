@@ -13,14 +13,14 @@ export type ListViewItemProps = {
 export const ListViewItem = ({currentIndex, itemIndex, title, icon}: ListViewItemProps) => {
     if (currentIndex === itemIndex) {
         return (
-            <Button width="100%" justifyContent="start" leftIcon={icon("white")} colorScheme='cyan' variant='solid' rightIcon={<ChevronRightIcon color="white" />}>
-                <Text color="white" pl={4}>{ title }</Text><Spacer/>
+            <Button width="100%" justifyContent="start" leftIcon={icon && icon("white")} colorScheme='cyan' variant='solid' rightIcon={<ChevronRightIcon color="white" />}>
+                <Text className="listViewItem" color="white" pl={1}>{ title }</Text><Spacer/>
             </Button>
         );
     } else {
         return (
-            <Button width="100%" justifyContent="start" leftIcon={icon("black")} colorScheme='blackAlpha' variant='ghost'>
-                <Text pl={4}>{ title }</Text>
+            <Button width="100%" justifyContent="start" leftIcon={icon && icon("black")} colorScheme='blackAlpha' variant='ghost'>
+                <Text className="listViewItem" pl={1}>{ title }</Text>
             </Button>
         );
     }

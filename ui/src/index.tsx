@@ -8,21 +8,18 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Covers} from "./pages/Covers";
 import "./pipod.css";
 import {io} from "socket.io-client";
+import {ListViewProps} from "./util/ListViewTypes";
+import {VinylRecord} from "@phosphor-icons/react";
+import {List} from "./pages/List";
+import {Music} from "./pages/Music";
+import {CategoryList} from "./pages/CategoryList";
 
 
 const container = document.getElementById("root")
 if (!container) throw new Error('Failed to find the root element');
 const root = ReactDOM.createRoot(container);
 
-const socket = io("pipod.local:9090", {
-    addTrailingSlash: false,
-    path: "",
-    transportOptions: {
-        websocket: {
-            path: ""
-        }
-    }
-});
+const socket = new WebSocket("ws://192.168.1.162:9091/ws");
 
 const router = createBrowserRouter([
     {
@@ -32,6 +29,41 @@ const router = createBrowserRouter([
     {
         path: "/covers",
         element: <Covers socket={socket} />,
+    },
+    {
+        path: "/music",
+        element: <Music socket={socket} />
+    },
+    {
+        path: "list/:type",
+        element: <CategoryList socket={socket} />,
+        loader: async ({ request, params }) => {
+            const response = await fetch(
+                `http://localhost:9091/list/${ params.type }`,
+            );
+
+            const listViewProps: ListViewProps = await response.json();
+
+            return listViewProps
+        },
+    },
+    {
+        path: "/list/:type/:id",
+        element: <List socket={socket} />,
+        loader: ({  params }): ListViewProps => {
+            return {
+                title: "brat",
+                fallbackIcon: (c: string) => <VinylRecord scale={12} color={c} />,
+                items: [
+                    { title: "360" },
+                    { title: "Club classics" },
+                    { title: "Sympathy is a knife" },
+                    { title: "I may say something stupid" },
+                    { title: "Talk talk" },
+                    { title: "Von dutch" },
+                ]
+            }
+        }
     }
 ]);
 

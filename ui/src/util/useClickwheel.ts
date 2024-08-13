@@ -1,11 +1,38 @@
 import {useEffect} from "react";
-import {Socket} from "socket.io-client";
-import {fetchClickwheelData} from "./clickwheelListeners";
+import {fetchClickWheelData} from "./clickwheelListeners";
 
-export function useClickwheel(maxItems: number, socket: Socket) {
+export function useClickwheel(socket: WebSocket, onClickWheelChange: any) {
+    const onMessageHandler = (e: MessageEvent) => {
+        const clickWheelData = fetchClickWheelData(e);
+
+        if (clickWheelData.button === "ClickWheel") {
+            onClickWheelChange(clickWheelData)
+        }
+    }
+
     useEffect(() => {
-        socket.onAny(fetchClickwheelData)
-    }, []);
+        socket.addEventListener("message", onMessageHandler);
 
-    return 0;
+        return () => {
+            socket.removeEventListener("message", onMessageHandler);
+        }
+    }, []);
+}
+
+export function useSelectButton(socket: WebSocket, onSelectButtonUp: any) {
+    const onMessageHandler = (e: MessageEvent) => {
+        const clickWheelData = fetchClickWheelData(e);
+
+        if (clickWheelData.button === "Select" && !clickWheelData.isClickWheelPressed) {
+            onSelectButtonUp()
+        }
+    }
+
+    useEffect(() => {
+        socket.addEventListener("message", onMessageHandler);
+
+        return () => {
+            socket.removeEventListener("message", onMessageHandler);
+        }
+    }, []);
 }

@@ -1,4 +1,4 @@
-package main
+package clickwheel
 
 type ClickWheelEvent struct {
 	Button              string `json:"button"`
