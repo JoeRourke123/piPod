@@ -1,4 +1,4 @@
-package main
+package util
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ const (
 	SocketPort = 9090
 )
 
-func openSocketConnection() int {
+func OpenSocketConnection() int {
 	serverFD, err := unix.Socket(unix.AF_INET, unix.SOCK_DGRAM, 0)
 	log.Println("Opening socket connection: ", serverFD)
 	if err != nil {

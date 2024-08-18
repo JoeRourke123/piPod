@@ -28,12 +28,58 @@ var (
 func GetAlbums(ctx context.Context, offset int) []spotify.SavedAlbum {
 	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
 
-	albums, err := client.CurrentUsersAlbums(context.Background(), spotify.Limit(util.MaxAlbumLimit), spotify.Offset(offset))
+	albums, err := client.CurrentUsersAlbums(ctx, spotify.Limit(util.MaxAlbumLimit), spotify.Offset(offset))
 	if err != nil {
 		log.Println("error fetching user albums: ", err)
 	}
 
 	return albums.Albums
+}
+
+func GetAlbum(ctx context.Context, albumId string) *spotify.FullAlbum {
+	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
+
+	album, err := client.GetAlbum(ctx, spotify.ID(albumId))
+	if err != nil {
+		log.Println("error fetching album: ", albumId, err)
+	}
+
+	return album
+}
+
+func GetPlaylists(ctx context.Context, offset int) []spotify.SimplePlaylist {
+	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
+
+	playlists, err := client.CurrentUsersPlaylists(ctx, spotify.Limit(util.MaxAlbumLimit), spotify.Offset(offset))
+	if err != nil {
+		log.Println("error fetching user playlists: ", err)
+	}
+
+	return playlists.Playlists
+}
+
+func GetPlaylist(ctx context.Context, playlistId string) *spotify.FullPlaylist {
+	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
+
+	playlist, err := client.GetPlaylist(ctx, spotify.ID(playlistId))
+	if err != nil {
+		log.Println("error fetching playlist: ", playlistId, err)
+	}
+
+	return playlist
+}
+
+func GetPlaylistTracks(ctx context.Context, playlistId string, offset int) []*spotify.FullTrack {
+	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
+
+	playlistItems, err := client.GetPlaylistItems(context.Background(), spotify.ID(playlistId), spotify.Limit(util.MaxAlbumLimit), spotify.Offset(offset))
+	if err != nil {
+		log.Println("error fetching playlist items: ", playlistId, err)
+	}
+
+	return util.Map(playlistItems.Items, func(i spotify.PlaylistItem) *spotify.FullTrack {
+		return i.Track.Track
+	})
 }
 
 const (
