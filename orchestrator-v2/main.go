@@ -19,6 +19,7 @@ func main() {
 	controller.SetupAlbumRoutes(app)
 	controller.SetupAuthRoutes(app)
 	controller.SetupPlaylistRoutes(app)
+	controller.SetupPlayerRoutes(app)
 
 	defer db.CloseDatabases()
 

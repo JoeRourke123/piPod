@@ -3,7 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"github.com/gofiber/fiber/v2"
-	"orchestrator/service/spotify"
+	"orchestrator/service/db/cache"
 	"orchestrator/ui"
 )
 
@@ -14,9 +14,9 @@ func SetupAlbumRoutes(app *fiber.App) {
 
 func getAlbum(ctx *fiber.Ctx) error {
 	albumId := ctx.Params("albumId")
-	album := spotify.GetAlbum(ctx.Context(), albumId)
+	album := cache.GetAlbumFromCache(ctx.Context(), albumId)
 
-	albumResponse := ui.GetAlbumResponse(album)
+	albumResponse := ui.GetAlbumResponse(&album)
 
 	albumJson, _ := json.Marshal(albumResponse)
 
@@ -25,7 +25,8 @@ func getAlbum(ctx *fiber.Ctx) error {
 
 func getUserAlbums(ctx *fiber.Ctx) error {
 	offset := ctx.QueryInt("next", 0)
-	albums := spotify.GetAlbums(ctx.Context(), offset)
+
+	albums := cache.GetCacheAlbums(ctx.Context(), offset)
 
 	albumResponse := ui.GetAlbumsResponse(albums)
 

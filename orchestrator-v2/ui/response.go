@@ -42,7 +42,7 @@ func convertTracksToListViewItem(tracks []spotify.SimpleTrack) []ListViewItemRes
 	return util.Map(tracks, func(t spotify.SimpleTrack) ListViewItemResponse {
 		return ListViewItemResponse{
 			Title: t.Name,
-			Path:  "/playing/" + t.ID.String(),
+			Path:  "/playing/" + string(t.URI),
 		}
 	})
 }
@@ -51,7 +51,7 @@ func convertPlaylistTracksToListViewItem(tracks []*spotify.FullTrack) []ListView
 	return util.Map(tracks, func(t *spotify.FullTrack) ListViewItemResponse {
 		return ListViewItemResponse{
 			Title: t.Name,
-			Path:  "/playing/" + t.ID.String(),
+			Path:  "/playing/" + string(t.URI),
 		}
 	})
 }

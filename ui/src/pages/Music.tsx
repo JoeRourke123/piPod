@@ -6,21 +6,22 @@ import {Guitar, MusicNote, Playlist, UserFocus, VinylRecord} from "@phosphor-ico
 export const Music = (props: PageProps) => {
     const items: ListViewProps = {
         title: "Music",
+        showStatus: true,
         items: [
             {
                 title: "Albums",
                 icon: (c: string) => <VinylRecord color={c} scale={12} />,
-                path: "list/albums"
+                path: "/list/albums"
             },
             {
                 title: "Playlists",
                 icon: (c: string) => <Playlist color={c} scale={12} />,
-                path: "list/playlists"
+                path: "/list/playlists"
             },
             {
                 title: "Artists",
                 icon: (c: string) => <Guitar color={c} scale={12} />,
-                path: "list/artists"
+                path: "/list/artists"
             },
             {
                 title: "Songs",

@@ -12,3 +12,15 @@ type ListViewItemResponse struct {
 	Path  string `json:"path,omitempty"`
 	Icon  string `json:"icon,omitempty"`
 }
+
+type AuthResponse struct {
+	HasToken    bool   `json:"has_token"`
+	AuthUrl     string `json:"auth_url"`
+	AccessToken string `json:"access_token,omitempty"`
+}
+
+type PlayerRequest struct {
+	DeviceId   string `json:"device_id"`
+	Action     string `json:"action"`
+	SpotifyUri string `json:"spotify_uri,omitempty"`
+}

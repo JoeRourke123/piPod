@@ -1,5 +1,6 @@
 import {useEffect} from "react";
 import {fetchClickWheelData} from "./clickwheelListeners";
+import {ListViewProps} from "./ListViewTypes";
 
 export function useClickwheel(socket: WebSocket, onClickWheelChange: any) {
     const onMessageHandler = (e: MessageEvent) => {
