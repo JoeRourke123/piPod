@@ -83,20 +83,24 @@ func SetSpotifyToken(token *oauth2.Token) {
 }
 
 func InsertAlbum(album spotify.FullAlbum) *document.Document {
-	doc := document.NewDocument()
-	doc.Set("added", time.DateTime)
+	if album.Name != "" && album.URI != "" {
+		doc := document.NewDocument()
+		doc.Set("added", time.DateTime)
 
-	albumJson, _ := json.Marshal(album)
-	albumMap := make(map[string]interface{})
-	json.Unmarshal(albumJson, &albumMap)
+		albumJson, _ := json.Marshal(album)
+		albumMap := make(map[string]interface{})
+		json.Unmarshal(albumJson, &albumMap)
 
-	doc.SetAll(albumMap)
+		doc.SetAll(albumMap)
 
-	_, err := db.InsertOne(albumCollection, doc)
-	if err != nil {
-		fmt.Println("could not insert album: ", err)
+		_, err := db.InsertOne(albumCollection, doc)
+		if err != nil {
+			fmt.Println("could not insert album: ", err)
+		}
+		return doc
 	}
-	return doc
+
+	return nil
 }
 
 func GetAlbums(offset int) ([]spotify.SavedAlbum, error) {
