@@ -4,7 +4,7 @@ body {
 
 .listView {
     overflow-y: scroll;
-    height: 180px;
+    height: 175px;
     box-shadow: white inset 0px 0px 80px 80px;
 }
 
@@ -16,9 +16,10 @@ body {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: 20ch;
+    max-width: 24ch;
 }
 
 .titleBar {
+    padding-top: 5px;
     box-shadow: white 0px 0px 80px 80px;
 }
