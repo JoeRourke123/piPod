@@ -5,10 +5,10 @@ import {useClickwheel} from "../../util/useClickwheel";
 import {useRenderItems} from "./utils/item-builder";
 import {useListViewCallbacks} from "./utils/list-view-callbacks";
 import {ItemLoader} from "./utils/item-loader";
-import {ListViewTitle} from "./sub-components/list-view-title";
-import {ListViewStatusBar} from "./sub-components/list-view-status-bar";
-import {ListViewBody} from "./sub-components/list-view-body";
-import { ListViewHeader } from "./sub-components/list-view-header";
+import {ListViewTitle} from "./elems/list-view-title";
+import {ListViewStatusBar} from "./elems/list-view-status-bar";
+import {ListViewBody} from "./elems/list-view-body";
+import { ListViewHeader } from "./elems/list-view-header";
 
 type BaseListViewProps = PageProps & {
     title: string;

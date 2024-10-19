@@ -4,9 +4,9 @@ import React from "react";
 import {socket} from "./socket";
 import {fetchAuthStatus} from "./service";
 import {LoaderFunction} from "@remix-run/router/utils";
-import {PaginatedListView} from "../components/list-view/implementations/paginated-list-view";
+import {PaginatedListView} from "../components/list-view/impl/paginated-list-view";
 import {getApiUrl} from "./functions";
-import {LiveListView} from "../components/list-view/implementations/live-list-view";
+import {LiveListView} from "../components/list-view/impl/live-list-view";
 
 
 const defaultLoaderFunction = (checkAuthStatus: boolean, apiEndpoint: string) => async ({params}: LoaderFunctionArgs) => {

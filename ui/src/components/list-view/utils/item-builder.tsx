@@ -1,4 +1,4 @@
-import {ListViewItem} from "../sub-components/list-view-item";
+import {ListViewItem} from "../elems/list-view-item";
 import * as React from "react";
 import {ListViewItemDetails} from "../list-view-types";
 import {useCallback, useMemo} from "react";
