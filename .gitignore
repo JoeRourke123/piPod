@@ -157,3 +157,6 @@ go.work.sum
 
 # env file
 .env
+
+orchestrator/download/
+orchestrator/piper-db/
