@@ -3,16 +3,15 @@ import * as React from "react"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {Covers} from "./pages/Covers";
+import {Covers} from "./pages/covers";
 import "./pipod.css";
-import {Auth} from "./pages/Auth";
-import {WebPlaybackProvider} from "./components/WebPlaybackProvider";
-import {Playing} from "./pages/Playing";
+import {Auth} from "./pages/auth";
+import {WebPlaybackProvider} from "./components/web-playback-provider";
+import {Playing} from "./pages/playing";
 import ReactDOM from "react-dom";
-import {DesktopSettings} from "./pages/DesktopSettings";
-import {Actions} from "./pages/Actions";
+import {DesktopSettings} from "./pages/desktop-settings";
+import {Actions} from "./pages/actions";
 import {fetchListView, liveListView, simpleView} from "./util/router-types";
-import {NewListView} from "./pages/TestNewListView";
 
 const router = createBrowserRouter([
     liveListView("/", "/views/home", true),
@@ -25,7 +24,6 @@ const router = createBrowserRouter([
     simpleView("/playing/:spotifyUri", (s) => <Playing socket={s} />),
     simpleView("/settings", (s) => <DesktopSettings socket={s} />),
     simpleView("/actions", (s) => <Actions socket={s} />),
-    simpleView("/newList", (s) => <NewListView socket={s}/>)
 ]);
 
 

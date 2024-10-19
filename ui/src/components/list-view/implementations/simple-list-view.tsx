@@ -1,5 +1,5 @@
-import {PageProps} from "../../../state/PageProps";
-import {ListViewItemDetails} from "../../../util/ListViewTypes";
+import {PageProps} from "../../../pages/page-props";
+import {ListViewItemDetails} from "../list-view-types";
 import {BaseListView} from "../base-list-view";
 import {useItemsHash} from "../utils/items-hash";
 

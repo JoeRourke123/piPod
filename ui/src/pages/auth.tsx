@@ -1,4 +1,4 @@
-import {PageProps} from "../state/PageProps";
+import {PageProps} from "./page-props";
 import {Center} from "@chakra-ui/react";
 import {QR} from "react-qr-rounded";
 import {useLocation, useNavigate} from "react-router-dom";

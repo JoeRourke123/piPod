@@ -5,7 +5,7 @@ import {unmarshallView, useListViewLoader} from "../utils/view-loader";
 import {useLocation} from "react-router-dom";
 import {useApiUrl} from "../utils/api-url";
 import {useItemsHash} from "../utils/items-hash";
-import {ListViewItemDetails} from "../../../util/ListViewTypes";
+import {ListViewItemDetails} from "../list-view-types";
 
 type LiveListViewProps = PaginatedListViewProps & {
     refreshInterval: number;

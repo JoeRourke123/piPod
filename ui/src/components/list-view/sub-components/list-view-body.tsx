@@ -1,4 +1,4 @@
-import {ListViewItemDetails} from "../../../util/ListViewTypes";
+import {ListViewItemDetails} from "../list-view-types";
 import {Box, Flex} from "@chakra-ui/react";
 import * as React from "react";
 import {useRenderItems} from "../utils/item-builder";

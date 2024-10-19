@@ -1,4 +1,4 @@
-import {PageProps} from "../state/PageProps";
+import {PageProps} from "./page-props";
 import {Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Select, VStack} from "@chakra-ui/react";
 
 export const DesktopSettings = (props: PageProps) => {

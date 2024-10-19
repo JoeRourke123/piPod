@@ -1,5 +1,5 @@
-import {ListViewItemDetails} from "../../../util/ListViewTypes";
-import {PageProps} from "../../../state/PageProps";
+import {ListViewItemDetails} from "../list-view-types";
+import {PageProps} from "../../../pages/page-props";
 import React, {useCallback, useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import {BaseListView} from "../base-list-view";
