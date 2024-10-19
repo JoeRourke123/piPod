@@ -1,4 +1,4 @@
-import {ListViewItemDetails} from "../../../util/ListViewTypes";
+import {ListViewItemDetails} from "../list-view-types";
 import {useState} from "react";
 import {stringHash} from "../../../util/functions";
 

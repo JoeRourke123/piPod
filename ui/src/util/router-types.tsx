@@ -1,11 +1,9 @@
 import {LoaderFunctionArgs, redirect, RouteObject} from "react-router-dom";
-import {CategoryListProps} from "./ListViewTypes";
-import {PageProps} from "../state/PageProps";
+import {PageProps} from "../pages/page-props";
 import React from "react";
 import {socket} from "./socket";
 import {fetchAuthStatus} from "./service";
 import {LoaderFunction} from "@remix-run/router/utils";
-import {Simulate} from "react-dom/test-utils";
 import {PaginatedListView} from "../components/list-view/implementations/paginated-list-view";
 import {getApiUrl} from "./functions";
 import {LiveListView} from "../components/list-view/implementations/live-list-view";
@@ -29,7 +27,7 @@ export const fetchListView = (
     checkAuthStatus: boolean = false,
     paginated: boolean = true,
     loaderFunction: LoaderFunction = defaultLoaderFunction(checkAuthStatus, apiEndpoint),
-    props?: CategoryListProps): RouteObject => {
+): RouteObject => {
     return {
         path: viewName,
         element: <PaginatedListView socket={socket} apiEndpoint={paginated ? apiEndpoint : undefined} />,
@@ -40,7 +38,7 @@ export const fetchListView = (
 export const simpleView = (
     viewName: string,
     viewObject: (_: WebSocket) => React.JSX.Element,
-    props?: PageProps): RouteObject => {
+): RouteObject => {
     return {
         path: viewName,
         element: viewObject(socket),

@@ -1,5 +1,5 @@
 import {useLoaderData} from "react-router-dom";
-import {ListViewItemDetails, ListViewProps} from "../../../util/ListViewTypes";
+import {ListViewItemDetails, ListViewProps} from "../list-view-types";
 
 export const useListViewLoader = (): ListViewProps => {
     const loaderData: any = useLoaderData();

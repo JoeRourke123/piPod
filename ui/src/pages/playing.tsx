@@ -1,4 +1,4 @@
-import {PageProps} from "../state/PageProps";
+import {PageProps} from "./page-props";
 import {
     usePlaybackState,
     usePlayerDevice,
@@ -6,7 +6,7 @@ import {
 import {useEffect, useState} from "react";
 import {useLocation, useParams, useSearchParams} from "react-router-dom";
 import {Container} from "@chakra-ui/react";
-import {PlayerView} from "../components/PlayerView";
+import {PlayerView} from "../components/player-view";
 
 export const Playing = (props: PageProps) => {
     const { spotifyUri } = useParams();

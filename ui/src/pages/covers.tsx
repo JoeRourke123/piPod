@@ -1,4 +1,4 @@
-import {PageProps} from "../state/PageProps";
+import {PageProps} from "./page-props";
 
 export const Covers = (props: PageProps) => {
     return (

@@ -1,4 +1,4 @@
-import {PageProps} from "../../state/PageProps";
+import {PageProps} from "../../pages/page-props";
 import {Box, Flex} from "@chakra-ui/react";
 import * as React from "react";
 import {useClickwheel} from "../../util/useClickwheel";

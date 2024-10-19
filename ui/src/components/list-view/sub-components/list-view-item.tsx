@@ -1,8 +1,6 @@
-import React, {ForwardRefExoticComponent, useCallback, useEffect} from "react";
 import {Button, Spacer, Text} from "@chakra-ui/react";
-import {Gear, IconProps, Joystick} from "@phosphor-icons/react";
-import {ChevronRightIcon, Icon} from "@chakra-ui/icons";
-import {ListViewItemDetails} from "../../../util/ListViewTypes";
+import {ChevronRightIcon} from "@chakra-ui/icons";
+import {ListViewItemDetails} from "../list-view-types";
 
 export type ListViewItemProps = {
     currentIndex: number

@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {fetchClickWheelData} from "./clickwheelListeners";
+import {fetchClickWheelData} from "./clickwheel-listeners";
 import {usePrevious} from "@chakra-ui/react";
 import {useLocation} from "react-router-dom";
 import {useMockClickwheel} from "./useMockClickwheel";
