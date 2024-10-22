@@ -9,6 +9,7 @@ import (
 	"orchestrator/service/spotify"
 	"orchestrator/ui/model"
 	"orchestrator/util/api"
+	"orchestrator/util/logger"
 )
 
 func SetupAuthRoutes(app *fiber.App) {
@@ -27,6 +28,9 @@ func handleAuthComplete(ctx *fiber.Ctx) error {
 	if err != nil {
 		return ctx.Status(http.StatusInternalServerError).SendString("Sorry could not build Spotify Token")
 	}
+
+	tokenResponse, _ := json.Marshal(token)
+	logger.Info(ctx.Context(), "token received: "+string(tokenResponse), logger.FromTag("handleAuthComplete"), logger.ApiTag("spotify", "Auth.Token"))
 
 	db.SetSpotifyToken(token)
 

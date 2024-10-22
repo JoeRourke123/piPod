@@ -11,9 +11,10 @@ import (
 func AlbumsToListViewItem(albums []spotify.SavedAlbum) []model.ListViewItemResponse {
 	return util.Map(albums, func(a spotify.SavedAlbum) model.ListViewItemResponse {
 		return model.ListViewItemResponse{
-			Title:   a.Name,
-			Path:    views.Album(string(a.ID)),
-			Actions: buildAlbumActions(a),
+			Title:    a.Name,
+			Subtitle: a.Artists[0].Name,
+			Path:     views.Album(string(a.ID)),
+			Actions:  buildAlbumActions(a),
 		}
 	})
 }

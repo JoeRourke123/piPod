@@ -90,3 +90,37 @@ func IsCurrentlyPlaying(ctx context.Context) bool {
 
 	return currentlyPlaying.Playing && isPlayingOnPiPod
 }
+
+func Skip(ctx context.Context, deviceId string) {
+	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
+	spotifyDeviceId := spotify.ID(deviceId)
+
+	err := client.NextOpt(ctx, &spotify.PlayOptions{DeviceID: &spotifyDeviceId})
+	if err != nil {
+		logger.Error(
+			ctx,
+			"could not skip track",
+			err, logger.ApiTag("spotify", "NextOpt"), logger.FromTag("Skip"), logger.DeviceTag(deviceId),
+		)
+		return
+	}
+
+	logger.Info(ctx, "skipped track", logger.DeviceTag(deviceId), logger.FromTag("Skip"), logger.ApiTag("spotify", "NextOpt"))
+}
+
+func Back(ctx context.Context, deviceId string) {
+	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
+	spotifyDeviceId := spotify.ID(deviceId)
+
+	err := client.PreviousOpt(ctx, &spotify.PlayOptions{DeviceID: &spotifyDeviceId})
+	if err != nil {
+		logger.Error(
+			ctx,
+			"could not go back",
+			err, logger.ApiTag("spotify", "PreviousOpt"), logger.FromTag("Back"), logger.DeviceTag(deviceId),
+		)
+		return
+	}
+
+	logger.Info(ctx, "went back", logger.DeviceTag(deviceId), logger.FromTag("Back"), logger.ApiTag("spotify", "PreviousOpt"))
+}

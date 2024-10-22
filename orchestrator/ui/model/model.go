@@ -9,6 +9,7 @@ type ListViewResponse struct {
 
 type ListViewItemResponse struct {
 	Title        string                 `json:"title"`
+	Subtitle     string                 `json:"subtitle,omitempty"`
 	Path         string                 `json:"path,omitempty"`
 	Icon         string                 `json:"icon,omitempty"`
 	Actions      []ListViewItemResponse `json:"actions,omitempty"`

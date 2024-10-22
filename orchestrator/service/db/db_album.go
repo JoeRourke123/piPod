@@ -33,7 +33,14 @@ func InsertAlbum(album spotify.SavedAlbum, albumPosition int) *document.Document
 }
 
 func GetAlbums(offset int) ([]spotify.SavedAlbum, error) {
-	albums, err := db.FindAll(query.NewQuery(albumCollection).Skip(offset).Limit(50).Sort(query.SortOption{Field: "added_pos", Direction: 1}))
+	albums, err := db.FindAll(
+		query.NewQuery(albumCollection).Skip(offset).Limit(50).Sort(
+			query.SortOption{
+				Field:     "added_time",
+				Direction: 1,
+			},
+		),
+	)
 
 	if err != nil {
 		return make([]spotify.SavedAlbum, 0), nil
