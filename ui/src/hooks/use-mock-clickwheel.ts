@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {handleKeyUp} from "./handle-key-up";
+import {handleKeyUp} from "../util/handle-key-up";
 import {useBeforeUnload} from "react-router-dom";
 
 export type MockClickwheelProps = {
