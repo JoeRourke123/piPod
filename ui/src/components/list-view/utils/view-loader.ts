@@ -23,6 +23,7 @@ const unmarshallItems = (items: any[]): ListViewItemDetails[] | undefined => {
     return items.map((item: any) => {
         return {
             title: item["title"],
+            subtitle: item["subtitle"],
             path: item["path"],
             requestUrl: item["request_url"],
             actionType: item["action_type"],

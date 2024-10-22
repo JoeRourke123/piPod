@@ -1,5 +1,5 @@
 import {useLocation, useNavigate} from "react-router-dom";
-import {ClickWheelResponse} from "../../../util/useClickwheel";
+import {ClickWheelResponse} from "../../../hooks/use-clickwheel";
 import {useCallback, useEffect} from "react";
 import {ItemLoader} from "./item-loader";
 import {useItemActionToasts} from "./item-action-toasts";
@@ -73,7 +73,7 @@ export const useListViewCallbacks = ({
     }, [key, itemsHash]);
 
     useEffect(() => {
-        const listViewItem = document.querySelectorAll("button.listViewItemButton")[selectedIndex] as HTMLElement;
+        const listViewItem = document.querySelectorAll("div.listViewItemButton")[selectedIndex] as HTMLElement;
         document.getElementById("list")?.scrollTo({left: 0, top: listViewItem.offsetTop - 81, behavior: "smooth"});
         if (onSelectedIndexChange) {
             onSelectedIndexChange(selectedIndex);

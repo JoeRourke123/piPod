@@ -1,48 +1,23 @@
 import {PageProps} from "./page-props";
-import {
-    usePlaybackState,
-    usePlayerDevice,
-} from "react-spotify-web-playback-sdk";
-import {useEffect, useState} from "react";
-import {useLocation, useParams, useSearchParams} from "react-router-dom";
 import {Container} from "@chakra-ui/react";
 import {PlayerView} from "../components/player-view";
+import {usePlayerSetup} from "../hooks/use-player-setup";
+import {useClickwheel} from "../hooks/use-clickwheel";
+import {useNavigate} from "react-router-dom";
 
-export const Playing = (props: PageProps) => {
-    const { spotifyUri } = useParams();
-    const [isStarted, setIsStarted] = useState(false)
-    const device = usePlayerDevice();
-    const playbackState = usePlaybackState(true, 250);
-    const [searchParams, _] = useSearchParams();
+export const Playing = ({socket}: PageProps) => {
+    const playbackState = usePlayerSetup();
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        if (device && !isStarted) {
-            console.log(device);
-
-            let playbackContext = searchParams.get("playback_context");
-            if (!playbackContext) {
-                playbackContext = playbackState?.context.uri || "";
-            }
-
-            fetch("http://localhost:9091/player", {
-                method: "POST",
-                body: JSON.stringify({
-                    "device_id": device?.device_id,
-                    "action": "START",
-                    "spotify_uri": spotifyUri,
-                    "playback_context": playbackContext
-                }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            setIsStarted(true);
+    useClickwheel({
+        maxClickWheelValue: 0, socket, onMenuButton: (_: number) => {
+            navigate(-1);
         }
-    }, [device]);
+    })
 
     return (
-        <Container>
-            { playbackState && <PlayerView playbackState={playbackState} /> }
+        <Container width="full" mx="none" px="none">
+            {playbackState && <PlayerView playbackState={playbackState}/>}
         </Container>
     )
 }

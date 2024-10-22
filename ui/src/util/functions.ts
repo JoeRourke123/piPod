@@ -30,3 +30,10 @@ export const stringHash = (str: string, seed = 0) => {
      const [h3, h4] = [h2>>>0, h1>>>0];
      return h4.toString(36).padStart(7, '0') + h3.toString(36).padStart(7, '0');
 };
+
+export const convertMsToTime = (ms: number): string => {
+    ms = Math.max(0, ms);
+    let minutes = Math.floor(ms / 60000);
+    let seconds = ((ms % 60000) / 1000);
+    return minutes + ":" + seconds.toFixed(0).padStart(2, '0');
+}

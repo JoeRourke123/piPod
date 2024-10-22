@@ -12,6 +12,8 @@ import ReactDOM from "react-dom";
 import {DesktopSettings} from "./pages/desktop-settings";
 import {Actions} from "./pages/actions";
 import {fetchListView, liveListView, simpleView} from "./util/router-types";
+import {ClickwheelProvider} from "./components/clickwheel-provider";
+import {socket} from "./util/socket";
 
 const router = createBrowserRouter([
     liveListView("/", "/views/home", true),
@@ -32,7 +34,9 @@ ReactDOM.render(
     <ColorModeScript />
       <ChakraProvider theme={theme}>
           <WebPlaybackProvider>
-              <RouterProvider router={router} />
+              <ClickwheelProvider socket={socket}>
+                  <RouterProvider router={router} />
+              </ClickwheelProvider>
           </WebPlaybackProvider>
       </ChakraProvider>
   </React.StrictMode>,

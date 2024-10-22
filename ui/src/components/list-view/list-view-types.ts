@@ -6,6 +6,7 @@ export type ListViewProps = {
 
 export type ListViewItemDetails = {
     title: string,
+    subtitle?: string,
     actionType?: "REDIRECT" | "POST" | "GET",
 
     actions?: ListViewItemDetails[],

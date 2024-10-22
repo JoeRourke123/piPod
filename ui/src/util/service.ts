@@ -11,3 +11,13 @@ export const fetchSpotifyToken = async () => {
 
     return responseJson["access_token"];
 }
+
+export const player = async (playerData: any) => {
+    await fetch("http://localhost:9091/player", {
+        method: "POST",
+        body: JSON.stringify(playerData),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+}

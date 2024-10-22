@@ -7,16 +7,17 @@ import {ItemLoader} from "./item-loader";
 type ItemBuilderOptions = {
     itemLoader: ItemLoader,
     selectedIndex: number,
-    itemsHash: string
+    itemsHash: string,
+    maxItems: number
 }
 
 export const useRenderItems = (
-    { itemLoader, selectedIndex, itemsHash}: ItemBuilderOptions,
+    { itemLoader, selectedIndex, itemsHash, maxItems}: ItemBuilderOptions,
 ): React.JSX.Element[] => {
-    return useMemo(() => itemBuilder(itemLoader, selectedIndex), [itemsHash, selectedIndex]);
+    return useMemo(() => itemBuilder(itemLoader, selectedIndex, maxItems), [itemsHash, selectedIndex]);
 }
 
-const itemBuilder = (itemLoader: ItemLoader, selectedIndex: number): React.JSX.Element[] => {
+const itemBuilder = (itemLoader: ItemLoader, selectedIndex: number, maxItems: number): React.JSX.Element[] => {
     const items: React.JSX.Element[] = [];
     let itemOffset = 0;
     let item = itemLoader(itemOffset);

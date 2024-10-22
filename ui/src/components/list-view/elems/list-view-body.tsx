@@ -11,7 +11,12 @@ export type ListViewBodyProps = {
 }
 
 export const ListViewBody = ({ selectedIndex, itemsHash, itemLoader }: ListViewBodyProps) => {
-    const renderedItems = useRenderItems({itemLoader, itemsHash, selectedIndex});
+    const renderedItems = useRenderItems({
+        itemLoader,
+        itemsHash,
+        selectedIndex,
+        maxItems: 10,
+    });
 
     return <Box className="listView" id="list">
         <Flex align="start" gap={1} py={4} flexFlow="column" children={renderedItems} />
