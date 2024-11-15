@@ -6,14 +6,16 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Covers} from "./pages/covers";
 import "./pipod.css";
 import {Auth} from "./pages/auth";
-import {WebPlaybackProvider} from "./components/web-playback-provider";
-import {Playing} from "./pages/playing";
 import ReactDOM from "react-dom";
 import {DesktopSettings} from "./pages/desktop-settings";
 import {Actions} from "./pages/actions";
 import {fetchListView, liveListView, simpleView} from "./util/router-types";
 import {ClickwheelProvider} from "./components/clickwheel-provider";
 import {socket} from "./util/socket";
+import {StatusContextProvider} from "./components/status-context-provider";
+import {Brickbreaker} from "./pages/games/brickbreaker";
+import {PlayerProvider} from "./components/player/player-provider";
+import {Player} from "./components/player/player";
 
 const router = createBrowserRouter([
     liveListView("/", "/views/home", true),
@@ -23,9 +25,11 @@ const router = createBrowserRouter([
     liveListView("/queue", "/queue"),
     simpleView("/auth", (s) => <Auth socket={s} />),
     simpleView("/covers", (s) => <Covers socket={s} />),
-    simpleView("/playing/:spotifyUri", (s) => <Playing socket={s} />),
+    simpleView("/playing/:spotifyUri", (s) => <Player />),
     simpleView("/settings", (s) => <DesktopSettings socket={s} />),
     simpleView("/actions", (s) => <Actions socket={s} />),
+    fetchListView("/games", "/list/games", false, false),
+    simpleView("/game/brickbreaker", (s) => <Brickbreaker socket={s} />)
 ]);
 
 
@@ -33,11 +37,13 @@ ReactDOM.render(
   <React.StrictMode>
     <ColorModeScript />
       <ChakraProvider theme={theme}>
-          <WebPlaybackProvider>
+          <PlayerProvider>
               <ClickwheelProvider socket={socket}>
-                  <RouterProvider router={router} />
+                  <StatusContextProvider socket={socket}>
+                      <RouterProvider router={router} />
+                  </StatusContextProvider>
               </ClickwheelProvider>
-          </WebPlaybackProvider>
+          </PlayerProvider>
       </ChakraProvider>
   </React.StrictMode>,
     document.getElementById("root")

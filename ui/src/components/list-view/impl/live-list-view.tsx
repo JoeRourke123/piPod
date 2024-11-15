@@ -12,7 +12,7 @@ type LiveListViewProps = PaginatedListViewProps & {
 }
 
 export const LiveListView = (props: LiveListViewProps): React.JSX.Element => {
-    let { title, showStatus, items: initialItems } = useListViewLoader();
+    let { title, showStatus, items: initialItems , icon, additionalInfo } = useListViewLoader();
     const {key} = useLocation()
 
     const apiUrl = useApiUrl(props.apiEndpoint);
@@ -21,9 +21,12 @@ export const LiveListView = (props: LiveListViewProps): React.JSX.Element => {
     const [itemsHash, updateItemsHash] = useItemsHash(items);
 
     useEffect(() => {
-        setItems(initialItems);
+        setItems([]);
+        setItemCount(0);
+        updateItemsHash([]);
         setItemCount(initialItems.length);
         updateItemsHash(initialItems);
+        setItems(initialItems);
     }, [key]);
 
     const itemLoader = useCallback((currentOffset: number): ListViewItemDetails => {
@@ -33,11 +36,15 @@ export const LiveListView = (props: LiveListViewProps): React.JSX.Element => {
     useEffect(() => {
         const interval = setInterval(() => {
             if (apiUrl) {
+                const currentLocation = window.location.href;
                 fetch(apiUrl).then(response => response.json()).then(json => {
+                    if (window.location.href !== currentLocation) {
+                        return;
+                    }
                     const updatedView = unmarshallView(json);
-                    setItems([...updatedView.items]);
                     setItemCount(updatedView.items.length);
                     updateItemsHash(updatedView.items);
+                    setItems(updatedView.items);
                 });
             }
         }, props.refreshInterval);
@@ -51,5 +58,8 @@ export const LiveListView = (props: LiveListViewProps): React.JSX.Element => {
         itemCount={itemCount}
         itemsHash={itemsHash}
         itemLoader={itemLoader}
-        socket={props.socket}/>;
+        socket={props.socket}
+        additionalInfo={additionalInfo}
+        icon={icon}
+    />;
 }

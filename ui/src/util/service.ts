@@ -13,7 +13,7 @@ export const fetchSpotifyToken = async () => {
 }
 
 export const player = async (playerData: any) => {
-    await fetch("http://localhost:9091/player", {
+    return await fetch("http://localhost:9091/player", {
         method: "POST",
         body: JSON.stringify(playerData),
         headers: {

@@ -1,19 +1,19 @@
 import {PageProps} from "../../pages/page-props";
-import {Box, Flex} from "@chakra-ui/react";
+import {Box} from "@chakra-ui/react";
 import * as React from "react";
 import {useClickwheel} from "../../hooks/use-clickwheel";
-import {useRenderItems} from "./utils/item-builder";
 import {useListViewCallbacks} from "./utils/list-view-callbacks";
 import {ItemLoader} from "./utils/item-loader";
-import {ListViewTitle} from "./elems/list-view-title";
-import {ListViewStatusBar} from "./elems/list-view-status-bar";
 import {ListViewBody} from "./elems/list-view-body";
-import { ListViewHeader } from "./elems/list-view-header";
+import {ListViewHeader} from "./elems/list-view-header";
 import {AnimatedLayout} from "../animated-layout";
+import {AdditionalListViewInfo} from "./list-view-types";
 
 type BaseListViewProps = PageProps & {
     title: string;
+    additionalInfo: AdditionalListViewInfo[];
     showStatus: boolean;
+    icon?: string;
     itemsHash: string;
     itemCount: number;
     itemLoader: ItemLoader;
@@ -23,10 +23,12 @@ type BaseListViewProps = PageProps & {
 
 export const BaseListView = ({
                                  title,
+                                 icon,
                                  itemLoader,
                                  itemCount,
                                  showStatus,
                                  itemsHash,
+                                 additionalInfo,
                                  socket,
                                  onSelectedIndexChange,
                              }: BaseListViewProps) => {
@@ -41,15 +43,18 @@ export const BaseListView = ({
         selectedIndex,
         onSelectedIndexChange,
         itemsHash,
+        itemCount,
+        hasAdditionalInfo: additionalInfo.length > 0,
     });
 
     return <>
         <AnimatedLayout>
             <Box fontSize="l" p={3} px={5}>
-                <ListViewHeader title={title} showStatus={showStatus} />
+                <ListViewHeader icon={icon} title={title} showStatus={showStatus}/>
                 <ListViewBody
                     itemLoader={itemLoader}
                     itemsHash={itemsHash}
+                    additionalInfo={additionalInfo}
                     selectedIndex={selectedIndex}/>
             </Box>
         </AnimatedLayout>

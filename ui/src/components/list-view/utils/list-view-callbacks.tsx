@@ -1,15 +1,19 @@
 import {useLocation, useNavigate} from "react-router-dom";
 import {ClickWheelResponse} from "../../../hooks/use-clickwheel";
-import {useCallback, useEffect} from "react";
+import {useCallback, useContext, useEffect} from "react";
 import {ItemLoader} from "./item-loader";
 import {useItemActionToasts} from "./item-action-toasts";
 import {usePlayerDevice} from "react-spotify-web-playback-sdk";
+import {PipodCache} from "../../../util/pipod-cache";
+import {CurrentTrackContext} from "../../player/current-track-context";
 
 type ListViewCallbacksProps = {
     itemLoader: ItemLoader;
+    itemCount: number;
     cw: Omit<ClickWheelResponse, "selectedIndex">;
     selectedIndex: number;
     itemsHash: string;
+    hasAdditionalInfo: boolean;
     onSelectedIndexChange?: (index: number) => void;
 }
 
@@ -17,13 +21,16 @@ export const useListViewCallbacks = ({
                                          selectedIndex,
                                          onSelectedIndexChange,
                                          itemLoader,
+                                         hasAdditionalInfo,
                                          itemsHash,
+                                         itemCount,
                                          cw: {setOnMenuButton, setOnSelectButtonLongPress, setOnSelectButton,}
                                      }: ListViewCallbacksProps) => {
     const [errorToast, successToast] = useItemActionToasts();
     const navigate = useNavigate();
     const {key, pathname} = useLocation();
     const device = usePlayerDevice();
+    const [currentTrack, _] = useContext(CurrentTrackContext);
 
     const onSelectButton = useCallback((currentIndex: number) => {
         const currentItem = itemLoader(currentIndex);
@@ -41,14 +48,15 @@ export const useListViewCallbacks = ({
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    "device_id": device?.device_id
+                    "deviceId": device?.device_id,
+                    "albumId": currentTrack?.albumId,
                 })
             }).then(r => r.status !== 200 ? errorToast() : successToast(currentItem.toastMessage));
         }
     }, [itemsHash, itemLoader, key]);
 
     const onMenuButton = useCallback((_: number) => {
-        localStorage.removeItem(key + "-selectedIndex");
+        PipodCache.clear(key);
         navigate(-1);
     }, [itemsHash, itemLoader, key]);
 
@@ -59,7 +67,7 @@ export const useListViewCallbacks = ({
                 state: {
                     returnToIndex: currentIndex,
                     previousPath: pathname,
-                    trackTitle: currentItem.title,
+                    title: currentItem.title,
                     actions: currentItem.actions
                 }
             });
@@ -73,8 +81,18 @@ export const useListViewCallbacks = ({
     }, [key, itemsHash]);
 
     useEffect(() => {
+        const scrollOffset = hasAdditionalInfo ? 55 : 81;
         const listViewItem = document.querySelectorAll("div.listViewItemButton")[selectedIndex] as HTMLElement;
-        document.getElementById("list")?.scrollTo({left: 0, top: listViewItem.offsetTop - 81, behavior: "smooth"});
+        const list = document.getElementById("list");
+        if (list && listViewItem) {
+            list.scrollTo({left: 0, top: listViewItem.offsetTop - scrollOffset, behavior: "smooth"});
+            if (selectedIndex === 0) {
+                list.scrollTo({left: 0, top: 0, behavior: "smooth"});
+            } else if (selectedIndex === itemCount - 1) {
+                // Jank setTimeout here to wait for the card to expand
+                setTimeout(() => list.scrollTo({left: 0, top: list.scrollHeight, behavior: "smooth"}), 80);
+            }
+        }
         if (onSelectedIndexChange) {
             onSelectedIndexChange(selectedIndex);
         }

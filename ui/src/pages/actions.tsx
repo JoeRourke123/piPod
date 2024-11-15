@@ -8,5 +8,5 @@ export const Actions = (props: PageProps): React.JSX.Element => {
     const {state} = useLocation();
     const {actions, title}: { title: string, actions: ListViewItemDetails[] } = state;
 
-    return <SimpleListView socket={props.socket} title={title} items={actions} showStatus />
+    return <SimpleListView socket={props.socket} title={title} items={actions} showStatus additionalInfo={[]} />
 }

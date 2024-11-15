@@ -4,12 +4,16 @@ export type ClickWheelData = {
     clickWheelPosition: number
 }
 
-export const fetchClickWheelData = (e: MessageEvent): ClickWheelData => {
-    const dataJson = JSON.parse(e.data);
+export const fetchClickWheelData = (e: MessageEvent): ClickWheelData | undefined => {
+    if (e.data) {
+        const dataJson = JSON.parse(e.data);
 
-    return {
-        button: dataJson["button"],
-        isClickWheelPressed: dataJson["is_click_wheel_pressed"],
-        clickWheelPosition: dataJson["click_wheel_position"]
+        if (dataJson["button"]) {
+            return {
+                button: dataJson["button"],
+                isClickWheelPressed: dataJson["is_click_wheel_pressed"],
+                clickWheelPosition: dataJson["click_wheel_position"]
+            }
+        }
     }
 }

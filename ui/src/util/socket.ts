@@ -1,1 +1,9 @@
-export const socket = new WebSocket("ws://192.168.1.162:9091/ws");
+export let socket = new WebSocket("ws://localhost:9091/ws");
+
+socket.onclose = (event) => {
+    socket = new WebSocket("ws://localhost:9091/ws")
+}
+
+socket.onerror = (event) => {
+    socket = new WebSocket("ws://localhost:9091/ws")
+}

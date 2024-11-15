@@ -76,25 +76,28 @@ export const useClickwheel = ({
 
     const onMessageHandler = useCallback((e: MessageEvent) => {
         const clickWheelData = fetchClickWheelData(e);
-        const isOnKeyUp = !clickWheelData.isClickWheelPressed;
 
-        if (clickWheelData.button === "ClickWheel") {
-            if (clickWheelData.isClickWheelPressed !== isPressed) {
-                setIsPressed(clickWheelData.isClickWheelPressed);
-            }
-            setCurrentPosition(clickWheelData.clickWheelPosition);
-        } else if (clickWheelData.button === "Select") {
-            if (isOnKeyUp) {
-                const timeSincePress = Date.now() - longPressStart
-                if (timeSincePress > LONG_PRESS_THRESHOLD) {
-                    if (onSelectButtonLongPress) {
-                        onLongSelectCallback(selectedIndex);
-                    }
-                } else if (onSelectButton) {
-                    onSelectCallback(selectedIndex);
+        if (clickWheelData) {
+            const isOnKeyUp = !clickWheelData.isClickWheelPressed;
+
+            if (clickWheelData.button === "ClickWheel") {
+                if (clickWheelData.isClickWheelPressed !== isPressed) {
+                    setIsPressed(clickWheelData.isClickWheelPressed);
                 }
-            } else {
-                setLongPressStart(Date.now());
+                setCurrentPosition(clickWheelData.clickWheelPosition);
+            } else if (clickWheelData.button === "Select") {
+                if (isOnKeyUp) {
+                    const timeSincePress = Date.now() - longPressStart
+                    if (timeSincePress > LONG_PRESS_THRESHOLD) {
+                        if (onSelectButtonLongPress) {
+                            onLongSelectCallback(selectedIndex);
+                        }
+                    } else if (onSelectButton) {
+                        onSelectCallback(selectedIndex);
+                    }
+                } else {
+                    setLongPressStart(Date.now());
+                }
             }
         }
     }, [selectedIndex]);

@@ -8,8 +8,8 @@ import {PaginatedListView} from "../components/list-view/impl/paginated-list-vie
 import {getApiUrl} from "./functions";
 import {LiveListView} from "../components/list-view/impl/live-list-view";
 
-
-const defaultLoaderFunction = (checkAuthStatus: boolean, apiEndpoint: string) => async ({params}: LoaderFunctionArgs) => {
+const defaultLoaderFunction = (checkAuthStatus: boolean, apiEndpoint: string) => async ({params, request}: LoaderFunctionArgs) => {
+    const query = request.url.split("?")[1];
     if (checkAuthStatus) {
         const authStatus = await fetchAuthStatus();
         if (!authStatus["has_token"]) {
@@ -17,7 +17,7 @@ const defaultLoaderFunction = (checkAuthStatus: boolean, apiEndpoint: string) =>
         }
     }
 
-    const response = await fetch(getApiUrl(apiEndpoint, params));
+    const response = await fetch(getApiUrl(apiEndpoint, params, query));
     return await response.json();
 }
 
@@ -49,7 +49,7 @@ export const liveListView = (
     viewName: string,
     apiEndpoint: string,
     checkAuthStatus: boolean = false,
-    refreshInterval: number = 1000,
+    refreshInterval: number = 2500,
     loaderFunction: LoaderFunction = defaultLoaderFunction(checkAuthStatus, apiEndpoint),
 ): RouteObject => {
 
