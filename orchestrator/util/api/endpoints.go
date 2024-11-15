@@ -1,6 +1,9 @@
 package api
 
-import "orchestrator/util"
+import (
+	"orchestrator/util"
+	"os"
+)
 
 var (
 	AlbumsList = builder("/list/albums")
@@ -31,7 +34,11 @@ var (
 	RemoveDownloadTrack = builderParam("/remove/download/track")
 	RemoveDownloadAlbum = builderParam("/remove/download/album")
 
-	Player = builder("/player")
+	Player        = builder("/player")
+	PlayerContent = builderParam("/player")
+	Artwork       = builderParam("/artwork")
+	PinAlbum      = builderParam("/pin/album")
+	UnpinAlbum    = builderParam("/unpin/album")
 
 	HomeView  = builder("/views/home")
 	MusicView = builder("/views/music")
@@ -52,4 +59,12 @@ func builderParam(path string) func(string) string {
 func Full(path string) string {
 	apiUrl := util.GetApiUrl()
 	return apiUrl + path
+}
+
+func GetLocalImageURL(spotifyID string) string {
+	artworkFilename := "artwork/" + spotifyID + ".jpeg"
+	if _, err := os.Stat(artworkFilename); err == nil {
+		return Full(Artwork(spotifyID))
+	}
+	return ""
 }

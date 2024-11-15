@@ -1,6 +1,7 @@
 package util
 
 import (
+	"github.com/zmb3/spotify/v2"
 	"net"
 	"strings"
 )
@@ -13,6 +14,14 @@ func Map[A any, B any](vs []A, f func(A) B) []B {
 		vsm[i] = f(v)
 	}
 	return vsm
+}
+
+func Sum(vs []int) int {
+	sum := 0
+	for _, v := range vs {
+		sum += v
+	}
+	return sum
 }
 
 func GetLocalIP() string {
@@ -61,4 +70,15 @@ func FilterNotNull[T any](input []*T) []T {
 	}), func(v *T) T {
 		return *v
 	})
+}
+
+func CheckForImage(images []spotify.Image) string {
+	if len(images) == 0 {
+		return ""
+	}
+	return images[0].URL
+}
+
+func UriToId(uri string) string {
+	return strings.Split(uri, ":")[2]
 }

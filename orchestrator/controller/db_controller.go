@@ -24,7 +24,7 @@ func handleClearCollection(ctx *fiber.Ctx) error {
 }
 
 func handleGetCollectionContent(ctx *fiber.Ctx) error {
-	collectionContent := db.GetCollectionContent(ctx.Params("collectionName"))
+	collectionContent := db.GetCollectionContent(ctx.Params("collectionName"), ctx.Queries())
 
 	if collectionContent == "" {
 		return ctx.SendStatus(fiber.StatusNoContent)

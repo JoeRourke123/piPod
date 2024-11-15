@@ -6,8 +6,12 @@ var (
 	Playlist      = builderParam("/playlists")
 	Podcast       = builderParam("/podcasts")
 	AddToPlaylist = builderParam("/playlists/add")
-	Playing       = func(trackUri, albumUri string) string {
-		return "/playing/" + string(trackUri) + "?playback_context=" + string(albumUri)
+	Playing       = func(trackUri, playbackContext string, albumId string) string {
+		path := "/playing/" + string(trackUri) + "?playback_context=" + playbackContext
+		if albumId != "" {
+			path += "&album_id=" + albumId
+		}
+		return path
 	}
 )
 

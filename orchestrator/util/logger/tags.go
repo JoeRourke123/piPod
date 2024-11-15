@@ -7,6 +7,7 @@ import (
 
 const (
 	DbWriteTag          = "db:write"
+	OfflineTag          = "offline"
 	DbReadTag           = "db.read"
 	OperationFetchTag   = "api:op:fetch"
 	ServiceOperationTag = "service:op"

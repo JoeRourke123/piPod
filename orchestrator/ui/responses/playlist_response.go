@@ -2,6 +2,7 @@ package responses
 
 import (
 	"github.com/zmb3/spotify/v2"
+	"orchestrator/ui"
 	"orchestrator/ui/items"
 	"orchestrator/ui/model"
 )
@@ -11,6 +12,7 @@ func GetPlaylistsResponse(playlists []spotify.SimplePlaylist) model.ListViewResp
 		Title:      "Playlists",
 		ShowStatus: true,
 		Items:      items.PlaylistsToListViewItems(playlists),
+		Icon:       ui.PLAYLIST,
 	}
 }
 

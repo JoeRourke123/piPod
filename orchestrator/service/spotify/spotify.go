@@ -16,6 +16,7 @@ var (
 		spotifyauth.ScopeUserModifyPlaybackState, spotifyauth.ScopeUserReadPlaybackState, spotifyauth.ScopeUserLibraryModify,
 		spotifyauth.ScopePlaylistModifyPublic, spotifyauth.ScopeStreaming, spotifyauth.ScopePlaylistModifyPrivate,
 		spotifyauth.ScopeUserTopRead, spotifyauth.ScopeUserReadRecentlyPlayed, spotifyauth.ScopeUserLibraryRead,
+		spotifyauth.ScopeUserFollowRead, spotifyauth.ScopeUserFollowModify, spotifyauth.ScopeUserReadEmail,
 	}
 	Auth = spotifyauth.New(
 		spotifyauth.WithClientID(os.Getenv("SPOTIFY_CLIENT_ID")),
@@ -37,7 +38,11 @@ func GetAlbums(ctx context.Context, offset int) []spotify.SavedAlbum {
 		)
 	}
 
-	return albums.Albums
+	if albums != nil && albums.Albums != nil {
+		return albums.Albums
+	} else {
+		return make([]spotify.SavedAlbum, 0)
+	}
 }
 
 func GetAlbum(ctx context.Context, albumId string) *spotify.FullAlbum {
@@ -135,6 +140,7 @@ func GetPodcasts(ctx context.Context, offset int) []spotify.SavedShow {
 			"error fetching user podcasts",
 			err, logger.ApiTag("spotify", "CurrentUsersShows"), logger.FromTag("GetPodcasts"),
 		)
+		return make([]spotify.SavedShow, 0)
 	}
 
 	return showPages.Shows
@@ -168,6 +174,21 @@ func GetPodcastEpisodes(ctx context.Context, podcastId string, offset int) []spo
 	}
 
 	return episodes.Episodes
+}
+
+func GetEpisode(ctx context.Context, episodeId string) *spotify.EpisodePage {
+	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
+
+	episode, err := client.GetEpisode(ctx, episodeId)
+	if err != nil {
+		logger.Error(
+			context.Background(),
+			"error fetching episode: "+episodeId,
+			err, logger.ApiTag("spotify", "GetEpisode"), logger.FromTag("GetEpisode"),
+		)
+	}
+
+	return episode
 }
 
 func GetTrack(ctx context.Context, trackId string) *spotify.FullTrack {

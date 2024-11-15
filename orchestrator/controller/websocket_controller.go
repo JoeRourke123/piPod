@@ -7,6 +7,7 @@ import (
 	"golang.org/x/sys/unix"
 	"log"
 	"orchestrator/clickwheel"
+	"orchestrator/service/os"
 	"orchestrator/util"
 	"orchestrator/util/api"
 )
@@ -21,6 +22,8 @@ func websocketController() fiber.Handler {
 		serverFD := util.OpenSocketConnection()
 
 		defer unix.Close(serverFD)
+
+		os.SendOsUpdates(c)
 
 		for {
 			response := make([]byte, util.PacketSize)

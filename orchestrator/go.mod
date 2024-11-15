@@ -30,6 +30,7 @@ require (
 	github.com/google/orderedcode v0.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.0.5 // indirect
+	github.com/gopxl/beep v1.4.1 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jomei/notionapi v1.13.1 // indirect
 	github.com/klauspost/compress v1.17.7 // indirect
@@ -38,7 +39,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/ostafen/clover/v2 v2.0.0-alpha.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rivo/uniseg v0.2.0 // indirect
+	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/savsgio/gotils v0.0.0-20240303185622-093b76447511 // indirect
 	github.com/spf13/cobra v0.0.5 // indirect

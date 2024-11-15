@@ -1,14 +1,17 @@
 package responses
 
 import (
-	"github.com/zmb3/spotify/v2"
+	"context"
+	"orchestrator/service/db"
+	"orchestrator/ui"
 	"orchestrator/ui/items"
 	"orchestrator/ui/model"
 )
 
-func GetQueueResponse(queue []spotify.FullTrack) model.ListViewResponse {
+func GetQueueResponse(ctx context.Context, queue []db.QueueItem) model.ListViewResponse {
 	return model.ListViewResponse{
 		Title: "Queue",
-		Items: items.QueueTracksToListViewItem(queue),
+		Icon:  ui.QUEUE,
+		Items: items.QueueTracksToListViewItem(ctx, queue),
 	}
 }

@@ -50,13 +50,13 @@ func downloadTrackCommand(ctx context.Context, trackId string, spotifyAlbumId st
 	if err != nil {
 		logger.Error(ctx, "error downloading track", err, logger.FromTag("handleDownloadTrack"), logger.ApiTag("tidal", "Download"))
 	} else {
-		db.SetDownloadedTrack(trackId, spotifyAlbumId, tidalTrack)
+		//db.SetDownloadedTrack(trackId, spotifyAlbumId, tidalTrack)
 		logger.Info(ctx, "downloaded track "+tidalTrack.Title, logger.FromTag("handleDownloadTrack"), logger.ApiTag("tidal", "Download"))
 	}
 }
 
 func downloadAlbumCommand(ctx context.Context, spotifyAlbum *sptfy.FullAlbum, tidalAlbum *gotidal.Album) {
-	downloadCommand := exec.Command("tidal-dl", "-l", tidalAlbum.TidalURL, "-q", "HiFi")
+	downloadCommand := exec.Command("/opt/homebrew/bin/tidal-dl", "-l", tidalAlbum.TidalURL, "-q", "HiFi")
 	downloadCommand.Stdout = os.Stdout
 	err := downloadCommand.Run()
 	if err != nil {

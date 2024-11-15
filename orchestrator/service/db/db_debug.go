@@ -19,8 +19,13 @@ func GetCollections() []string {
 	})
 }
 
-func GetCollectionContent(collectionName string) string {
-	content, err := db.FindAll(query.NewQuery("./" + collectionName))
+func GetCollectionContent(collectionName string, queryMap map[string]string) string {
+	filterQuery := query.NewQuery("./" + collectionName)
+	for key, value := range queryMap {
+		filterQuery = filterQuery.Where(query.Field(key).Like("%" + value + "%"))
+	}
+
+	content, err := db.FindAll(filterQuery)
 	if err != nil {
 		return ""
 	}

@@ -1,6 +1,8 @@
 package responses
 
-import "orchestrator/ui/model"
+import (
+	"orchestrator/ui/model"
+)
 
 func GetEmptyResponse(title string) model.ListViewResponse {
 	return model.ListViewResponse{

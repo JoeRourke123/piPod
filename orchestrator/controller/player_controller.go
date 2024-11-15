@@ -1,15 +1,23 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"orchestrator/service/db"
+	"orchestrator/service/db/cache"
+	"orchestrator/service/player"
 	"orchestrator/service/spotify"
 	"orchestrator/ui/model"
+	"orchestrator/ui/responses"
+	"orchestrator/util"
 	"orchestrator/util/api"
+	"strings"
 )
 
 func SetupPlayerRoutes(app *fiber.App) {
 	app.Post(api.Player(), handlePlayer)
+	app.Get(api.PlayerContent(":contentId"), handlePlayerContent)
 }
 
 func handlePlayer(ctx *fiber.Ctx) error {
@@ -20,32 +28,42 @@ func handlePlayer(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	context := ctx.Context()
+	playerService := player.PlayerServiceBuilder(playerRequest)
 
-	switch playerRequest.Action {
-	case "START":
-		spotify.Start(context, playerRequest.DeviceId, playerRequest.SpotifyUri, playerRequest.PlaybackContext)
-		break
-	case "PAUSE":
-		spotify.Pause(context, playerRequest.DeviceId)
-		break
-	case "PLAY":
-		spotify.Play(context, playerRequest.DeviceId)
-		break
-	case "TOGGLE":
-		if spotify.IsCurrentlyPlaying(context) {
-			spotify.Pause(context, playerRequest.DeviceId)
-		} else {
-			spotify.Play(context, playerRequest.DeviceId)
-		}
-		break
-	case "SKIP":
-		spotify.Skip(context, playerRequest.DeviceId)
-		break
-	case "BACK":
-		spotify.Back(context, playerRequest.DeviceId)
-		break
+	track, album := playerService(ctx.Context(), playerRequest)
+
+	if track != nil && album != nil {
+		db.SetCurrentTrack(track, album, playerRequest.PlaybackContext)
+		response := responses.GetTrackPlayerResponse(track, album)
+		responseJson, _ := json.Marshal(response)
+		return ctx.Send(responseJson)
+	} else if strings.Contains(playerRequest.SpotifyUri, "track") {
+		track, album, _ := cache.GetTrack(ctx.Context(), playerRequest.SpotifyUri, playerRequest.AlbumID)
+		db.SetCurrentTrack(track, &album.SimpleAlbum, playerRequest.PlaybackContext)
+		response := responses.GetTrackPlayerResponse(track, &album.SimpleAlbum)
+		responseJson, _ := json.Marshal(response)
+		return ctx.Send(responseJson)
+	} else if strings.Contains(playerRequest.SpotifyUri, "show") {
+		podcast := spotify.GetPodcast(ctx.Context(), playerRequest.AlbumID)
+		episode := spotify.GetEpisode(ctx.Context(), util.UriToId(playerRequest.SpotifyUri))
+		response := responses.GetPodcastPlayerResponse(podcast, episode)
+		responseJson, _ := json.Marshal(response)
+		return ctx.Send(responseJson)
+	} else {
+		response := responses.GetCurrentPlayerResponse()
+		responseJson, _ := json.Marshal(response)
+		return ctx.Send(responseJson)
 	}
+}
 
-	return ctx.SendStatus(fiber.StatusAccepted)
+func handlePlayerContent(ctx *fiber.Ctx) error {
+	contentId := ctx.Params("contentId")
+
+	filePath := db.GetTrackPath(contentId)
+
+	if filePath != "" {
+		return ctx.SendFile(filePath, false)
+	} else {
+		return ctx.SendStatus(fiber.StatusNotFound)
+	}
 }

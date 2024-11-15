@@ -40,13 +40,16 @@ func handleAuthComplete(ctx *fiber.Ctx) error {
 
 func handleIsAuth(ctx *fiber.Ctx) error {
 	token := spotify.GenerateAccessToken(ctx.Context())
+	isOnline := db.IsInternetEnabled()
 
 	authResponse := model.AuthResponse{
-		HasToken: token != nil,
+		HasToken: !isOnline || token != nil,
 		AuthUrl:  api.Full(api.LoginRedirect()),
 	}
 
-	if authResponse.HasToken {
+	if !isOnline {
+		authResponse.AccessToken = db.GetSpotifyToken().AccessToken
+	} else if authResponse.HasToken {
 		authResponse.AccessToken = token.AccessToken
 	}
 

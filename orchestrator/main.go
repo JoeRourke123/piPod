@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
+	"orchestrator/behaviour"
 	"orchestrator/controller"
 	"orchestrator/service/db"
 	"orchestrator/util/logger"
@@ -13,6 +14,8 @@ import (
 func main() {
 	db.InitialiseDatabase()
 	app := fiber.New()
+
+	behaviour.Setup()
 
 	logger.Info(context.Background(), "starting PiPod server", "service")
 
@@ -29,12 +32,11 @@ func main() {
 	controller.SetupDownloadRoutes(app)
 	controller.SetupDbRoutes(app)
 	controller.SetupViewsRoutes(app)
+	controller.SetupGamesRoutes(app)
 
 	defer db.CloseDatabases()
 
 	controller.SetupWebsocketRoute(app)
 
 	log.Fatal(app.Listen("0.0.0.0:9091"))
-	// Access the websocket server: ws://localhost:3000/ws/123?v=1.0
-	// https://www.websocket.org/echo.html
 }

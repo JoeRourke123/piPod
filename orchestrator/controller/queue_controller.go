@@ -3,7 +3,8 @@ package controller
 import (
 	"encoding/json"
 	"github.com/gofiber/fiber/v2"
-	"orchestrator/service/spotify"
+	"orchestrator/service/db/cache"
+	"orchestrator/service/queue"
 	"orchestrator/ui/responses"
 	"orchestrator/util/api"
 )
@@ -14,9 +15,9 @@ func SetupQueueRoutes(app *fiber.App) {
 }
 
 func handleGetQueue(ctx *fiber.Ctx) error {
-	queue := spotify.GetQueue(ctx.Context())
+	queueItems := queue.List(ctx.Context())
 
-	queueResponse := responses.GetQueueResponse(queue)
+	queueResponse := responses.GetQueueResponse(ctx.Context(), queueItems)
 
 	queueJson, _ := json.Marshal(queueResponse)
 
@@ -28,13 +29,17 @@ func handlePostQueue(ctx *fiber.Ctx) error {
 
 	type QueueTrackRequest struct {
 		DeviceId string `json:"device_id"`
+		AlbumId  string `json:"album_id"`
 	}
 	var request QueueTrackRequest
 	ctx.BodyParser(&request)
 
 	//logger.Error(ctx.Context(), "error parsing request", err, logger.FromTag("handlePostQueue"))
-
-	spotify.QueueTrack(ctx.Context(), trackId, request.DeviceId)
+	track, album, err := cache.GetTrack(ctx.Context(), trackId, request.AlbumId)
+	if err != nil {
+		return ctx.SendStatus(fiber.StatusInternalServerError)
+	}
+	queue.Track(ctx.Context(), track, &album.SimpleAlbum, request.DeviceId)
 
 	return ctx.SendStatus(fiber.StatusOK)
 }

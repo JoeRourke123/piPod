@@ -71,27 +71,27 @@ func Start(ctx context.Context, deviceId string, spotifyUri string, playbackCont
 	logger.Info(ctx, "started playing track", logger.DeviceTag(deviceId), logger.UriTag(spotifyUri), logger.FromTag("Start"), logger.ApiTag("spotify", "PlayOpt"))
 }
 
-func IsCurrentlyPlaying(ctx context.Context) bool {
+func IsCurrentlyPlaying(ctx context.Context) (bool, *spotify.FullTrack, *spotify.URI) {
 	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
 	currentlyPlaying, err := client.PlayerCurrentlyPlaying(ctx)
 	if err != nil {
 		logger.Error(ctx, "could not get currently playing track", err, logger.ApiTag("spotify", "PlayerCurrentlyPlaying"), logger.FromTag("IsCurrentlyPlaying"))
-		return false
+		return false, nil, nil
 	}
 
 	devices, err := client.PlayerDevices(ctx)
 	if err != nil {
 		logger.Error(ctx, "could not get player devices", err, logger.ApiTag("spotify", "PlayerDevices"), logger.FromTag("IsCurrentlyPlaying"))
-		return false
+		return false, nil, nil
 	}
 	isPlayingOnPiPod := len(util.Filter(devices, func(d spotify.PlayerDevice) bool {
 		return d.Active && d.Name == "PiPod"
 	})) > 0
 
-	return currentlyPlaying.Playing && isPlayingOnPiPod
+	return currentlyPlaying.Playing && isPlayingOnPiPod, currentlyPlaying.Item, &currentlyPlaying.PlaybackContext.URI
 }
 
-func Skip(ctx context.Context, deviceId string) {
+func Skip(ctx context.Context, deviceId string) *spotify.CurrentlyPlaying {
 	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
 	spotifyDeviceId := spotify.ID(deviceId)
 
@@ -102,13 +102,15 @@ func Skip(ctx context.Context, deviceId string) {
 			"could not skip track",
 			err, logger.ApiTag("spotify", "NextOpt"), logger.FromTag("Skip"), logger.DeviceTag(deviceId),
 		)
-		return
+		return nil
 	}
 
 	logger.Info(ctx, "skipped track", logger.DeviceTag(deviceId), logger.FromTag("Skip"), logger.ApiTag("spotify", "NextOpt"))
+	currentlyPlaying, _ := client.PlayerCurrentlyPlaying(ctx)
+	return currentlyPlaying
 }
 
-func Back(ctx context.Context, deviceId string) {
+func Back(ctx context.Context, deviceId string) *spotify.CurrentlyPlaying {
 	client := spotify.New(Auth.Client(ctx, db.GetSpotifyToken()))
 	spotifyDeviceId := spotify.ID(deviceId)
 
@@ -119,8 +121,10 @@ func Back(ctx context.Context, deviceId string) {
 			"could not go back",
 			err, logger.ApiTag("spotify", "PreviousOpt"), logger.FromTag("Back"), logger.DeviceTag(deviceId),
 		)
-		return
+		return nil
 	}
 
 	logger.Info(ctx, "went back", logger.DeviceTag(deviceId), logger.FromTag("Back"), logger.ApiTag("spotify", "PreviousOpt"))
+	currentlyPlaying, _ := client.PlayerCurrentlyPlaying(ctx)
+	return currentlyPlaying
 }
