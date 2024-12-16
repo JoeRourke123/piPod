@@ -50,7 +50,7 @@ export const ClickwheelProvider = ({children, socket}: PageProps & { children: R
                 action: action,
             }).then(handleOfflineBehaviour(clickwheelData));
         }
-    }, [device]);
+    }, [device, playerContext, currentTrack]);
 
 
     const handleOfflineBehaviour = (clickwheelData: ClickWheelData) => async (response: CurrentTrackDetails) => {

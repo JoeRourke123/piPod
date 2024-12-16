@@ -1,12 +1,12 @@
 import {AdditionalListViewInfo} from "../list-view-types";
-import {Box, Flex, Text, Wrap} from "@chakra-ui/react";
+import {Box, Flex, Text} from "@chakra-ui/react";
 import {ListViewIcon} from "../impl/list-view-icon";
 
 export const AdditionalInfoList = ({ additionalInfo }: { additionalInfo: AdditionalListViewInfo[] }) => {
     if (additionalInfo.length) {
-        return <Wrap flexDirection="row" px="4px" pb="12px" spacingX={5} spacingY={1}>
+        return <Flex  wrap="wrap" flexDirection="row" px="4px" pb="12px" gap="5px">
             {additionalInfo.map((info, index) => <ListViewAdditionalInfo key={index} {...info} />)}
-        </Wrap>;
+        </Flex>;
     } else {
         return <></>;
     }

@@ -2,10 +2,6 @@ import {
     Box, Button,
     Flex, IconButton,
     Image,
-    Slider,
-    SliderFilledTrack,
-    SliderThumb,
-    SliderTrack,
     Text,
     VStack
 } from "@chakra-ui/react";
@@ -14,6 +10,7 @@ import {Airplay, SpeakerHigh} from "@phosphor-icons/react";
 import {PlayerContext} from "./player-provider";
 import {convertMsToTime} from "../../util/functions";
 import {CurrentTrackContext} from "./current-track-context";
+import { Slider } from "@chakra-ui/slider";
 
 export const PlayerView = () => {
     const [currentTrack, _] = useContext(CurrentTrackContext);
@@ -40,19 +37,15 @@ export const PlayerView = () => {
     </VStack>
 
     return <VStack height="100vh" gap="2" px="6" pt="6" width="full">
-        cv
         <Flex width="100%" flexDirection="row" alignItems={"center"} justifyContent={"space-around"}>
             {image}
             {title}
         </Flex>
         <Box pt="4" width="full">
             <Flex width="full" flexDirection="column" gap="1">
-                <Slider focusThumbOnChange={false} colorScheme="white" aria-label='slider-ex-1' value={playerContext.getPosition()} defaultValue={1} min={0} max={currentTrack.duration}>
-                    <SliderTrack>
-                        <SliderFilledTrack />
-                    </SliderTrack>
-                    <SliderThumb boxSize="8px" />
-                </Slider>
+                <Box width="full" height="25px">
+                    <Slider size="md" defaultValue={40} width="full" zIndex={999} min={0} max={currentTrack.duration} value={playerContext.getPosition()} />
+                </Box>
                 <Flex width="full" flexDirection="row" justifyContent="space-between">
                     <Text fontSize="sm" color="whiteAlpha.800">{ durationTime }</Text>
                     <Text fontSize="sm" color="whiteAlpha.800">-{ positionTime }</Text>
@@ -62,13 +55,11 @@ export const PlayerView = () => {
         <Flex height="full" width="full" alignItems="start" flexDirection="row" justifyContent="space-between">
             <IconButton
                 size="sm"
-                isRound={true}
                 variant="solid"
                 aria-label="Volume"
-                icon={<SpeakerHigh />}
-            />
-            <Button size="sm" rounded={20} leftIcon={<Airplay />}>
-                Joe's AirPods
+            ><SpeakerHigh /></IconButton>
+            <Button size="sm" rounded={20}>
+                <Airplay /> Joe's AirPods
             </Button>
         </Flex>
     </VStack>

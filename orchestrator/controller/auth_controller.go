@@ -26,6 +26,7 @@ func handleAuthComplete(ctx *fiber.Ctx) error {
 	request, _ := adaptor.ConvertRequest(ctx, false)
 	token, err := spotify.Auth.Token(ctx.Context(), spotify.AuthState, request)
 	if err != nil {
+		logger.Error(ctx.Context(), "could not build Spotify Token", err, logger.FromTag("handleAuthComplete"), logger.ApiTag("spotify", "Auth.Token"))
 		return ctx.Status(http.StatusInternalServerError).SendString("Sorry could not build Spotify Token")
 	}
 

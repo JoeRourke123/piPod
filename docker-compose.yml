@@ -1,0 +1,30 @@
+version: '3'
+services:
+  pipod-conductor:
+    image: golang:1.23.4-bookworm
+    container_name: conductor
+    privileged: true
+    volumes:
+      - ./conductor:/conductor
+    environment:
+      - ENV=dev
+      - PLATFORM=macos
+      - NOTION_SECRET=secret_znxTkvva5QTl1roW7HVZHdWGr9dCtlLdeZBGuqrktUk
+      - SPOTIFY_CLIENT_ID=246ec94fd48845e1a5b1fed058ec6652
+      - SPOTIFY_CLIENT_SECRET=ad1dee2e3a2e4733884c417d69fcd6f7
+      - TIDAL_CLIENT_ID=TP0EO5AvEivSmqCo
+      - TIDAL_CLIENT_SECRET=NkUFvtdIVVFmDrGGcuQDCZfuZKogK5K33aTWXVuIeP4=
+    ports:
+      - "9091:9091"
+    entrypoint: /conductor/entrypoint.sh
+
+  pipod-ui:
+    image: node:22.11.0-bookworm
+    container_name: ui
+    volumes:
+      - ./ui:/ui
+    environment:
+      - ENV=dev
+    ports:
+      - "3000:3000"
+    entrypoint: /ui/entrypoint.sh

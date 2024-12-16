@@ -6,8 +6,10 @@ import {useLocation} from "react-router-dom";
 import {useApiUrl} from "../utils/api-url";
 import {useItemsHash} from "../utils/items-hash";
 import {ListViewItemDetails} from "../list-view-types";
+import {Simulate} from "react-dom/test-utils";
+import abort = Simulate.abort;
 
-type LiveListViewProps = PaginatedListViewProps & {
+type LiveListViewProps = Omit<PaginatedListViewProps, 'paginated'> & {
     refreshInterval: number;
 }
 
@@ -15,41 +17,42 @@ export const LiveListView = (props: LiveListViewProps): React.JSX.Element => {
     let { title, showStatus, items: initialItems , icon, additionalInfo } = useListViewLoader();
     const {key} = useLocation()
 
-    const apiUrl = useApiUrl(props.apiEndpoint);
+    const apiUrl = useApiUrl();
     const [items, setItems] = useState(initialItems);
     const [itemCount, setItemCount] = useState<number>(items.length);
     const [itemsHash, updateItemsHash] = useItemsHash(items);
 
-    useEffect(() => {
-        setItems([]);
-        setItemCount(0);
-        updateItemsHash([]);
-        setItemCount(initialItems.length);
-        updateItemsHash(initialItems);
-        setItems(initialItems);
-    }, [key]);
-
     const itemLoader = useCallback((currentOffset: number): ListViewItemDetails => {
         return items[currentOffset];
-    }, [key, items, itemsHash])
+    }, [key, items, itemsHash, itemCount]);
 
     useEffect(() => {
+        setItems([]);
+        updateItemsHash([]);
+        setItemCount(0);
+        setItems(initialItems);
+        updateItemsHash(initialItems);
+        setItemCount(initialItems.length);
+        const abortController = new AbortController();
         const interval = setInterval(() => {
             if (apiUrl) {
                 const currentLocation = window.location.href;
-                fetch(apiUrl).then(response => response.json()).then(json => {
+                fetch(apiUrl, { signal: abortController.signal }).then(response => response.json()).then(json => {
                     if (window.location.href !== currentLocation) {
                         return;
                     }
                     const updatedView = unmarshallView(json);
-                    setItemCount(updatedView.items.length);
-                    updateItemsHash(updatedView.items);
                     setItems(updatedView.items);
+                    updateItemsHash(updatedView.items);
+                    setItemCount(updatedView.items.length);
                 });
             }
         }, props.refreshInterval);
 
-        return () => clearInterval(interval);
+        return () => {
+            abortController.abort("moved page");
+            clearInterval(interval);
+        };
     }, [key]);
 
     return <BaseListView

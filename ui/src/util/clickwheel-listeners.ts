@@ -5,7 +5,7 @@ export type ClickWheelData = {
 }
 
 export const fetchClickWheelData = (e: MessageEvent): ClickWheelData | undefined => {
-    if (e.data) {
+    if (e.data && e.data != "null") {
         const dataJson = JSON.parse(e.data);
 
         if (dataJson["button"]) {

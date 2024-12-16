@@ -12,19 +12,14 @@ export const PlayerInit = ({children}: { children: React.JSX.Element[] }) => {
 
     const device = usePlayerDevice();
 
-    const {spotifyUri} = useParams();
-    const [searchParams, _] = useSearchParams();
+    const {spotifyUri, playbackContext} = useParams();
 
     useEffect(() => {
         if (!playerContext.playing || currentTrack?.spotifyUri !== spotifyUri) {
-            const playbackContext = searchParams.get("playback_context") || undefined;
-            const albumId = searchParams.get("album_id") || undefined;
-
             if (device) {
                 sendPlayerCommand({
                     action: "START",
                     playbackContext,
-                    albumId,
                     spotifyUri,
                     deviceId: device.device_id,
                 }).then(async (response) => {

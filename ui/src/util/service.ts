@@ -9,7 +9,7 @@ export const fetchAuthStatus = async () => {
 export const fetchSpotifyToken = async () => {
     const responseJson = await fetchAuthStatus();
 
-    return responseJson["access_token"];
+    return responseJson["accessToken"];
 }
 
 export const player = async (playerData: any) => {

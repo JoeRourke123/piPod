@@ -1,12 +1,8 @@
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {getApiUrl} from "../../../util/functions";
 
-export const useApiUrl = (apiEndpoint?: string): string | undefined => {
+export const useApiUrl = (): string | undefined => {
     const params = useParams();
-
-    if (!apiEndpoint) {
-        return undefined;
-    }
-
-    return getApiUrl(apiEndpoint, params);
+    const location = useLocation();
+    return getApiUrl(location.pathname, params);
 }

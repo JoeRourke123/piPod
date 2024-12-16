@@ -50,7 +50,7 @@ func handlePlayer(ctx *fiber.Ctx) error {
 		responseJson, _ := json.Marshal(response)
 		return ctx.Send(responseJson)
 	} else {
-		response := responses.GetCurrentPlayerResponse()
+		response := responses.GetCurrentPlayerResponse(ctx.Context())
 		responseJson, _ := json.Marshal(response)
 		return ctx.Send(responseJson)
 	}

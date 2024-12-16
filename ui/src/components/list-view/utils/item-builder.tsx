@@ -22,14 +22,14 @@ const itemBuilder = (itemLoader: ItemLoader, selectedIndex: number, additionalIn
     const items: React.JSX.Element[] = [];
 
     if (additionalInfo) {
-        items.push(<AdditionalInfoList additionalInfo={additionalInfo} />);
+        items.push(<AdditionalInfoList key="additionalInfo" additionalInfo={additionalInfo} />);
     }
 
     let itemOffset = 0;
     let item = itemLoader(itemOffset);
 
     while(item) {
-        items.push(<ListViewItem key={item.path} currentIndex={selectedIndex} itemIndex={itemOffset} item={item} />);
+        items.push(<ListViewItem key={item.path + "-" + itemOffset} currentIndex={selectedIndex} itemIndex={itemOffset} item={item} />);
         itemOffset++;
         item = itemLoader(itemOffset);
     }

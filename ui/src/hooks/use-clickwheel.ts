@@ -1,8 +1,8 @@
 import {useCallback, useEffect, useState} from "react";
 import {fetchClickWheelData} from "../util/clickwheel-listeners";
-import {usePrevious} from "@chakra-ui/react";
 import {useLocation} from "react-router-dom";
 import {useMockClickwheel} from "./use-mock-clickwheel";
+import {usePrevious} from '@uidotdev/usehooks';
 
 export type ClickWheelProps = {
     socket: WebSocket,

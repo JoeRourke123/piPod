@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	AlbumsList = builder("/list/albums")
+	AlbumsList = builder("/albums")
 	Album      = builderParam("/albums")
 
 	PlaylistList = builder("/list/playlists")
@@ -36,9 +36,9 @@ var (
 
 	Player        = builder("/player")
 	PlayerContent = builderParam("/player")
-	Artwork       = builderParam("/artwork")
-	PinAlbum      = builderParam("/pin/album")
-	UnpinAlbum    = builderParam("/unpin/album")
+	Artwork       = builderMiddleParam("/album", "/artwork")
+	PinAlbum      = builderMiddleParam("/album", "/pin")
+	UnpinAlbum    = builderMiddleParam("/album", "/unpin")
 
 	HomeView  = builder("/views/home")
 	MusicView = builder("/views/music")
@@ -53,6 +53,12 @@ func builder(path string) func() string {
 func builderParam(path string) func(string) string {
 	return func(parameter string) string {
 		return path + "/" + parameter
+	}
+}
+
+func builderMiddleParam(prefix string, suffix string) func(string) string {
+	return func(parameter string) string {
+		return prefix + "/" + parameter + suffix
 	}
 }
 

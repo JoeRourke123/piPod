@@ -62,7 +62,7 @@ func GetCurrentPlaybackContext() string {
 	return ""
 }
 
-func GetCurrentTrack() (*spotify.SimpleTrack, *spotify.SavedAlbum, string) {
+func GetCurrentTrack() (*spotify.SimpleTrack, *spotify.SimpleAlbum, string) {
 	trackId, albumId, playbackContext := GetCurrentTrackId(), GetCurrentAlbumId(), GetCurrentPlaybackContext()
 
 	if trackId == "" || albumId == "" {
@@ -74,7 +74,7 @@ func GetCurrentTrack() (*spotify.SimpleTrack, *spotify.SavedAlbum, string) {
 		return nil, nil, ""
 	}
 
-	return track, album, playbackContext
+	return track, &album.SimpleAlbum, playbackContext
 }
 
 func SetCurrentTrack(track *spotify.SimpleTrack, album *spotify.SimpleAlbum, playbackContext string) {

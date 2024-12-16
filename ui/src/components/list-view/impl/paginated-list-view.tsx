@@ -9,7 +9,7 @@ import {useApiUrl} from "../utils/api-url";
 import {PipodCache} from "../../../util/pipod-cache";
 
 export type PaginatedListViewProps = PageProps & {
-    apiEndpoint?: string
+    paginated?: boolean
     useCache?: boolean
 }
 
@@ -17,7 +17,7 @@ export const PaginatedListView = (props: PaginatedListViewProps): React.JSX.Elem
     let { title, showStatus, items: initialItems, icon, additionalInfo } = useListViewLoader();
     const {key} = useLocation();
     const [query] = useSearchParams();
-    const apiUrl = useApiUrl(props.apiEndpoint);
+    const apiUrl = useApiUrl();
     const [items, setItems] = useState(initialItems);
     const [itemCount, setItemCount] = useState<number>(items.length);
     const [itemsHash, updateItemsHash] = useItemsHash(items);
@@ -40,9 +40,9 @@ export const PaginatedListView = (props: PaginatedListViewProps): React.JSX.Elem
     }, [key, items, itemsHash])
 
     const onSelectedIndexChange = useCallback((index: number) => {
-        if (apiUrl && (itemCount - index) <= 10) {
+        if (props.paginated && apiUrl && (itemCount - index) <= 10) {
             if (loadingStatus === 0) {
-                let apiUrlWithOffset = `${apiUrl}next=${items.length}`;
+                let apiUrlWithOffset = `${apiUrl}?offset=${items.length}`;
                 if (query.get("filter")) {
                     apiUrlWithOffset += `&filter=${query.get("filter")}`;
                 } if (query.get("sort")) {

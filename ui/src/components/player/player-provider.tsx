@@ -1,9 +1,7 @@
 import React, {createContext, useEffect, useState} from "react";
 import {WebPlaybackProvider} from "../web-playback-provider";
-import {usePlaybackState, useSpotifyPlayer} from "react-spotify-web-playback-sdk";
 import {CurrentTrackProvider} from "./current-track-provider";
 import {CurrentTrackDetails} from "./current-track-context";
-import {sendPlayerCommand} from "./send-player-command";
 
 export class PlayerContextWrapper {
     private audio: HTMLAudioElement | undefined;
@@ -67,26 +65,6 @@ export const PlayerProvider = ({children}: { children: React.JSX.Element }) => {
 }
 
 const PlayerProviderSetup = ({children, playerContext}: { children: React.JSX.Element, playerContext: PlayerContextWrapper }) => {
-    const player = useSpotifyPlayer();
-
-    const playbackState = usePlaybackState(true, 500);
-
-    useEffect(() => {
-        player?.on("player_state_changed", (state) => {
-            playerContext.playing = !state.paused;
-
-            if (playerContext.playing) {
-                playerContext.playerSource = "SPOTIFY";
-            }
-        });
-    }, [player, playerContext]);
-
-    useEffect(() => {
-        if (playbackState) {
-            playerContext.setPosition(playbackState.position);
-        }
-    }, [playbackState]);
-
     useEffect(() => {
         playerContext.offlinePlayerStateChanged = (audio: HTMLAudioElement) => {
             playerContext.playing = audio.paused;

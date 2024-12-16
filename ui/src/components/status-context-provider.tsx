@@ -20,8 +20,8 @@ export const StatusContextProvider = (props: PageProps & { children: React.JSX.E
         if (event.data) {
             const messageData = JSON.parse(event.data);
 
-            if (messageData["is_internet_enabled"] !== undefined) {
-                setInternetEnabled(messageData["is_internet_enabled"]);
+            if (messageData["isInternetEnabled"] !== undefined) {
+                setInternetEnabled(messageData["isInternetEnabled"]);
             }
         }
     }, []);

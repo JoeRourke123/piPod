@@ -39,7 +39,7 @@ func DownloadAlbumAction(albumId spotify.ID, isDownloaded bool) model.ListViewIt
 }
 
 func PinAlbumAction(albumId spotify.ID) model.ListViewItemResponse {
-	if db.IsAlbumPinned(string(albumId)) {
+	if db.IsAlbumPinnedById(string(albumId)) {
 		return model.ListViewItemResponse{
 			Title:        "Unpin Album",
 			ActionType:   "GET",

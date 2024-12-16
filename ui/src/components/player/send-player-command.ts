@@ -2,7 +2,7 @@ import {CurrentTrackDetails} from "./current-track-context";
 import {player} from "../../util/service";
 
 type PlayerOptions = {
-    action: "START" | "TOGGLE" | "BACK" | "SKIP" | "TRIGGER" | "NONE";
+    action: "START" | "TOGGLE" | "BACK" | "SKIP" | "TRIGGER" | "PLAYING" | "NONE";
     spotifyUri?: string;
     albumId?: string;
     playbackContext?: string;

@@ -1,8 +1,10 @@
 package responses
 
 import (
+	"context"
 	"github.com/zmb3/spotify/v2"
 	"orchestrator/service/db"
+	sptfy "orchestrator/service/spotify"
 	"orchestrator/ui/model"
 	"orchestrator/util/api"
 )
@@ -45,13 +47,19 @@ func GetPodcastPlayerResponse(podcast spotify.FullShow, episode *spotify.Episode
 	}
 }
 
-func GetCurrentPlayerResponse() model.PlayerResponse {
+func GetCurrentPlayerResponse(ctx context.Context) model.PlayerResponse {
 	playerState := "OFFLINE"
 	if db.IsInternetEnabled() {
 		playerState = "SPOTIFY"
 	}
 
 	currentTrack, album, _ := db.GetCurrentTrack()
+	if db.IsInternetEnabled() {
+		_, currentFullTrack, playerContext := sptfy.IsCurrentlyPlaying(ctx)
+		currentTrack = &currentFullTrack.SimpleTrack
+		album = &currentFullTrack.Album
+		db.SetCurrentTrack(currentTrack, album, string(*playerContext))
+	}
 
 	return model.PlayerResponse{
 		PlayerState: playerState,

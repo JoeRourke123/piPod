@@ -1,4 +1,4 @@
-import {useToast} from "@chakra-ui/react";
+import {useToast} from "@chakra-ui/toast";
 
 const useErrorToast = () => {
     const toast = useToast();
@@ -7,9 +7,8 @@ const useErrorToast = () => {
         title: "An error occurred",
         position: "bottom-left",
         status: "error",
-        variant: "subtle",
         isClosable: false,
-        duration: 1000
+        duration: 1000,
     });
 }
 
@@ -19,7 +18,6 @@ const useSuccessToast = () => {
     return (toastMessage?: string) => toast({
         title: toastMessage || "Done!",
         position: "bottom-left",
-        variant: "subtle",
         isClosable: false,
         duration: 1000
     });

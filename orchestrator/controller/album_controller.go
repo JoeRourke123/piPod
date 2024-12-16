@@ -14,7 +14,6 @@ func SetupAlbumRoutes(app *fiber.App) {
 	app.Get(api.AlbumsList(), getUserAlbums)
 	app.Get(api.Album(":albumId"), getAlbum)
 	app.Get(api.Artwork(":albumId"), getAlbumArtwork)
-	app.Get(api.PinAlbum(":albumId"), pinAlbum)
 	app.Get(api.UnpinAlbum(":albumId"), unpinAlbum)
 }
 
@@ -54,17 +53,6 @@ func getAlbumArtwork(ctx *fiber.Ctx) error {
 	artworkFilename := "artwork/" + albumId + ".jpeg"
 
 	return ctx.SendFile(artworkFilename, true)
-}
-
-func pinAlbum(ctx *fiber.Ctx) error {
-	albumId := ctx.Params("albumId")
-
-	err := db.PinAlbum(albumId, true)
-	if err != nil {
-		return ctx.SendStatus(500)
-	}
-
-	return ctx.SendStatus(200)
 }
 
 func unpinAlbum(ctx *fiber.Ctx) error {

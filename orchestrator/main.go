@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
+	controller2 "orchestrator/api/controller"
 	"orchestrator/behaviour"
 	"orchestrator/controller"
 	"orchestrator/service/db"
@@ -23,7 +24,7 @@ func main() {
 		AllowOrigins: "http://localhost:3000",
 	}))
 
-	controller.SetupAlbumRoutes(app)
+	controller2.InitControllers(app)
 	controller.SetupAuthRoutes(app)
 	controller.SetupPlaylistRoutes(app)
 	controller.SetupPlayerRoutes(app)

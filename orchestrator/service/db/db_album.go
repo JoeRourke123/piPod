@@ -12,6 +12,7 @@ import (
 
 func InsertAlbum(album spotify.SavedAlbum, albumPosition int) *document.Document {
 	if album.Name != "" && album.URI != "" {
+		currentDoc, _ := db.FindFirst(query.NewQuery(albumCollection).Where(query.Field("album.id").Eq(album.ID.String())))
 		doc := document.NewDocument()
 		albumJson, _ := json.Marshal(album)
 		albumMap := make(map[string]interface{})
@@ -19,7 +20,8 @@ func InsertAlbum(album spotify.SavedAlbum, albumPosition int) *document.Document
 		albumMap["added_pos"] = albumPosition
 		albumMap["added_time"] = time.Now()
 		albumMap["artist_name"] = album.Artists[0].Name
-		albumMap["pinned"] = IsAlbumPinned(album.ID.String())
+		albumMap["pinned"] = IsAlbumPinned(currentDoc)
+		albumMap["downloaded"] = IsAlbumDownloaded(album.ID.String())
 
 		doc.SetAll(albumMap)
 
@@ -108,9 +110,13 @@ func PinAlbum(albumId string, pinAlbum bool) error {
 	return nil
 }
 
-func IsAlbumPinned(albumId string) bool {
-	albumDoc, err := db.FindFirst(query.NewQuery(albumCollection).Where(query.Field("album.id").Eq(albumId).And(query.Field("pinned").IsTrue())))
-	return albumDoc != nil && err == nil
+func IsAlbumPinned(album *document.Document) bool {
+	return album != nil && album.Has("pinned") && album.Get("pinned").(bool)
+}
+
+func IsAlbumPinnedById(albumId string) bool {
+	album, _ := db.FindFirst(query.NewQuery(albumCollection).Where(query.Field("album.id").Eq(albumId)))
+	return IsAlbumPinned(album)
 }
 
 func GetPinnedAlbums() ([]spotify.SavedAlbum, error) {

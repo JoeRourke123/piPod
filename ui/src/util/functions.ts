@@ -8,9 +8,9 @@ export const areMatching = (x: any, y: any): boolean => {
     ) : (x === y);
 }
 
-export const getApiUrl = (apiEndpoint: string, params: Readonly<Params<string>>, query: string = ""): string => {
-    const parsedEndpoint = apiEndpoint.replace(/:([^\/]+)/g, (_, key) => params[key] || "");
-    return `http://localhost:9091${parsedEndpoint}?${query}`;
+export const getApiUrl = (currentPath: string, params: Readonly<Params> = {}): string => {
+    const query = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    return `http://localhost:9091${currentPath}`;
 }
 
 export const stringHash = (str: string, seed = 0) => {

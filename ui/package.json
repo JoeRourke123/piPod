@@ -4,41 +4,47 @@
   "private": true,
   "dependencies": {
     "@chakra-ui/drawer": "^1.0.0-next.3",
-    "@chakra-ui/icons": "^1.1.7",
-    "@chakra-ui/react": "^1.8.9",
-    "@emotion/react": "^11.0.0",
+    "@chakra-ui/react": "^3.1.2",
+    "@chakra-ui/slider": "^2.1.0",
+    "@chakra-ui/system": "^2.6.2",
+    "@chakra-ui/toast": "^7.0.2",
+    "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.0.0",
     "@phosphor-icons/react": "^2.1.7",
     "@smakss/react-scroll-direction": "^4.2.0",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.0.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.1.0",
-    "@types/jest": "^28.1.1",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.80",
-    "@types/react-dom": "^17.0.25",
-    "framer-motion": "^6.2.9",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@uidotdev/usehooks": "^2.4.1",
+    "framer-motion": "^11.11.17",
     "granim": "^2.0.0",
+    "json-edit-react": "^1.17.1",
     "konva": "^9.3.16",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "next-themes": "^0.4.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-fast-marquee": "^1.6.5",
-    "react-icons": "^3.0.0",
+    "react-icons": "^5.3.0",
     "react-json-view": "^1.21.3",
-    "react-konva": "17.0.2-6",
+    "react-konva": "18.2.10",
     "react-qr-rounded": "^1.0.0",
-    "react-router-dom": "^6.26.0",
+    "react-router-dom": "^6.28.0",
     "react-scripts": "5.0.1",
     "react-spotify-web-playback-sdk": "^3.0.2",
-    "socket.io-client": "^4.7.5",
-    "typescript": "^4.6.3",
-    "web-vitals": "^2.1.4"
+    "react-use": "^17.5.1",
+    "socket.io-client": "^4.8.1",
+    "typescript": "^5.6.3",
+    "web-vitals": "^4.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "node --max-old-space-size=400 --optimize-for-size node_modules/.bin/react-scripts start",
+    "build": "node --max-old-space-size=400 --optimize-for-size node_modules/.bin/react-scripts build",
+    "test": "node --max-old-space-size=400 --optimize-for-size node_modules/.bin/react-scripts test",
+    "eject": "node --max-old-space-size=400 --optimize-for-size node_modules/.bin/react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -54,5 +60,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@chakra-ui/cli": "^3.2.1"
   }
 }

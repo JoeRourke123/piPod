@@ -3,7 +3,7 @@ import React, {useMemo} from "react";
 import {Box, Flex, Text} from "@chakra-ui/react";
 import Marquee from "react-fast-marquee";
 import {ListViewIcon} from "../impl/list-view-icon";
-import {ChevronRightIcon} from "@chakra-ui/icons";
+import {CaretRight} from "@phosphor-icons/react";
 
 export const ListViewItemContent = ({title, isSelected, subtitle, icon, disabled}: ListViewItemDetails & { isSelected: boolean }) => {
     const iconColour = isSelected ? "white" : "blackAlpha";
@@ -38,7 +38,7 @@ export const ListViewItemContent = ({title, isSelected, subtitle, icon, disabled
                             </Box>}
                     </Box>
                 </Flex>
-                <ChevronRightIcon color="white" fontSize="24px"/>
+                <CaretRight color="white" fontSize="24px"/>
             </Flex>
         </>;
     } else {

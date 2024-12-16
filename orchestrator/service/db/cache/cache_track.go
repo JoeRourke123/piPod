@@ -40,10 +40,19 @@ func GetAlbumPlaybackContext(ctx context.Context, playbackContext string, spotif
 func GetCurrentTrack(ctx context.Context) (*spotify.SimpleTrack, *spotify.SimpleAlbum, *spotify.URI) {
 	if db.IsInternetEnabled() {
 		_, track, playbackContext := sptfy.IsCurrentlyPlaying(ctx)
+		if track == nil {
+			return nil, nil, nil
+		}
+
 		return &track.SimpleTrack, &track.Album, playbackContext
 	} else {
 		track, album, playbackContext := db.GetCurrentTrack()
 		playbackContextUri := spotify.URI(playbackContext)
-		return track, &album.SimpleAlbum, &playbackContextUri
+
+		if track == nil || album == nil {
+			return nil, nil, nil
+		}
+
+		return track, album, &playbackContextUri
 	}
 }
